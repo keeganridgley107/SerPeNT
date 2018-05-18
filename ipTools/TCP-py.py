@@ -18,6 +18,7 @@ def main():
     ipaddress = args.address
     portNumbers = args.ports.split(",")
 
+
 if __name__ == '__main__':
     # call the main function
     main()

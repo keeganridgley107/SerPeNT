@@ -8,7 +8,6 @@ import argparse
 
 def main():
     """run mgmt module"""
-    x = 12
 
 
 if __name__ == '__main__':
