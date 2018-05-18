@@ -1,0 +1,6 @@
+admin
+guest
+default
+password
+bestpass
+helloworld

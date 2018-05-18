@@ -14,7 +14,7 @@ import ftplib
 ##########################################################################################
 
 def ftpRecon(host, user, password):
-    """ recon ftp server once password is found"""
+    """ recon ftp server once password is found """
     try:
         ftp = ftplib.FTP(host)
         ftp.login(user, password)
