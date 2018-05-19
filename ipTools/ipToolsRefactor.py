@@ -64,28 +64,39 @@ def create_report():
         # Load scan_profile.txt and list profiles
         scan_profiles = open('Setup_files/ipTools.config', 'r')
         scan_profiles_items = scan_profiles.readlines()
-        # print(scan_profiles_items, "item array")
+        scan_templates = []
+
+        # loop populates scan_templates
         for line in scan_profiles_items:
             # clean lines in dictionary file
             config_line = line.strip('\r').strip('\n')
-            # print("TESTING : config_line: ", config_line[:2])
-            # this is the config codes for comment, item type & option=value
-            if config_line[:2] == "$$":
+
+            if len(config_line) > 2 and config_line[:2] == "$$":
+                # scan name = new profile
                 scan_name = config_line[2:]
-                print(scan_name)
+                scan_templates.append({"Scan Name": scan_name})
+
+            elif len(config_line) > 2 and config_line[0] == "$" and config_line[1] != "$":
+                # scan option
+                scan_option_value = config_line.split("=")
+                profile_num = len(scan_templates)
+                scan_templates[profile_num - 1][scan_option_value[0]] = scan_option_value[1]
+        # list options with number
+        for profile in range(0, len(scan_templates)):
+            print('[' + str(profile) + ']', ' ', scan_templates[profile]['Scan Name'])
         scan_profiles.close()
+        scan_profile_id = input("[+] Please Enter a Number: ")
+        if int(scan_profile_id) <= len(scan_templates):
+            # valid selection
+            print("[+] Selected: ", scan_templates[int(scan_profile_id)]['Scan Name'])
     elif load_scan_profile == "n":
+        # TODO: finish custom report creation module
         # create a new report based on custom scan_profile
-
         # single ip or network scan?
-
         # ports to scan?
-
         # passive or active?
-
         # generate or load dict / rule files for target?
-
-        op = 2
+        pass
     else:
         # bad input son. try again.
         banner_print("BAD INPUT")
