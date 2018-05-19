@@ -18,6 +18,11 @@ def reports():
     """view, save, and export scan reports"""
 
 
+def banner_print(text_string):
+    """print the input as a banner on the terminal"""
+    banner_size = len(text_string)
+
+
 def setup():
     """create a report or edit settings"""
 
@@ -26,8 +31,10 @@ def setup():
     print("*  SETUP  *")
     print("")
     print("[1] Create a Report")
-    print("[2] Settings")
+    print("[2] Edit Settings")
+    print("")
 
+    # grab user input, handle bad selections
     setup_input = input("Please Enter a Number: ")
     if setup_input == "1":
         # create a new report, scan_profile or custom
@@ -35,6 +42,10 @@ def setup():
     elif setup_input == "2":
         # edit the scan profiles / ipTools.config text files
         x = 0
+    else:
+        # bad selection, try again
+        print("[-] ERROR: Bad selection, Try Again.")
+        setup()
 
 
 def main():
