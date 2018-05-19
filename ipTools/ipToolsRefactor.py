@@ -63,13 +63,28 @@ def create_report():
     if load_scan_profile == "y":
         # Load scan_profile.txt and list profiles
         scan_profiles = open('Setup_files/ipTools.config', 'r')
-
-        for line in scan_profiles.readlines():
+        scan_profiles_items = scan_profiles.readlines()
+        # print(scan_profiles_items, "item array")
+        for line in scan_profiles_items:
             # clean lines in dictionary file
             config_line = line.strip('\r').strip('\n')
-            print("[+] config_line: ", config_line)
+            # print("TESTING : config_line: ", config_line[:2])
+            # this is the config codes for comment, item type & option=value
+            if config_line[:2] == "$$":
+                scan_name = config_line[2:]
+                print(scan_name)
+        scan_profiles.close()
     elif load_scan_profile == "n":
         # create a new report based on custom scan_profile
+
+        # single ip or network scan?
+
+        # ports to scan?
+
+        # passive or active?
+
+        # generate or load dict / rule files for target?
+
         op = 2
     else:
         # bad input son. try again.
