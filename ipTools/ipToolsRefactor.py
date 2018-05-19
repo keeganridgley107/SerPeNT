@@ -1,5 +1,5 @@
 """Automated wireless network utility
-Usage: ipTools.py [-h] ADDRESS [-n] [-p] <PORT,PORT,+>
+Usage: ipTools.py [-h]
 """
 
 # IMPORT MODULES
@@ -10,12 +10,38 @@ import ftplib
 
 
 
+def recon():
+    """run scans and add results to report file"""
+
+
+def reports():
+    """view, save, and export scan reports"""
+
+
+def setup():
+    """create a report or edit settings"""
+
+    # print SETUP banner
+    print("***********")
+    print("*  SETUP  *")
+    print("")
+    print("[1] Create a Report")
+    print("[2] Settings")
+
+    setup_input = input("Please Enter a Number: ")
+    if setup_input == "1":
+        # create a new report, scan_profile or custom
+        x = 0
+    elif setup_input == "2":
+        # edit the scan profiles / ipTools.config text files
+        x = 0
+
+
 def main():
-    """run mgmt module"""
-# TODO: add the report() module
-# TODO: reports() has view(), export(), back()
-# TODO: back should return to the setup() module
-# TODO: setup() has scan_profiles(), report(), settings(), modules()
+    """run setup module to begin interactive utility"""
+    print('[+] Starting Network Scanner... ')
+    setup()
+
 
 if __name__ == '__main__':
     # call the main function
