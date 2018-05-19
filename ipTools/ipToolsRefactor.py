@@ -58,6 +58,7 @@ def setup():
 def create_report():
     """create a report file using scan_profile or custom params"""
 
+    banner_print("Create Report")
     load_scan_profile = input('[+] Use a Scan Profile? (y or n) ')
     if load_scan_profile == "y":
         # Load scan_profile.txt and list profiles
@@ -67,6 +68,13 @@ def create_report():
             # clean lines in dictionary file
             config_line = line.strip('\r').strip('\n')
             print("[+] config_line: ", config_line)
+    elif load_scan_profile == "n":
+        # create a new report based on custom scan_profile
+        op = 2
+    else:
+        # bad input son. try again.
+        banner_print("BAD INPUT")
+        create_report()
 
 ################################################################################
 # PROGRAM UTILS
