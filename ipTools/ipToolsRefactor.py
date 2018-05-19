@@ -1,4 +1,4 @@
-"""Automated wireless network utility
+"""interactive wireless network utility
 Usage: ipTools.py [-h]
 """
 
@@ -9,24 +9,24 @@ import ipaddress
 import ftplib
 
 
+###############################################################################
+# RECON
+
 
 def recon():
     """run scans and add results to report file"""
+
+
+###############################################################################
+# REPORTS
 
 
 def reports():
     """view, save, and export scan reports"""
 
 
-def banner_print(text_string, style_character='*'):
-    """print the input as a banner on the terminal"""
-
-    frame_line = style_character * (len(text_string) + 4)
-    print(frame_line)
-    print('{0} {1} {0}'.format(style_character, text_string))
-    print(frame_line)
-    print("")
-
+###############################################################################
+# SETUP
 
 def setup():
     """create a report or edit settings"""
@@ -39,10 +39,11 @@ def setup():
     print("")
 
     # grab user input, handle bad selections
-    setup_input = input("Please Enter a Number: ")
+    setup_input = input("[+] Please Enter a Number: ")
     if setup_input == "1":
         # create a new report, scan_profile or custom
-        x = 0
+        create_report()
+
     elif setup_input == "2":
         # edit the scan profiles / ipTools.config text files
         x = 0
@@ -52,11 +53,25 @@ def setup():
         # user fat fingers = call setup() again
         setup()
 
-    # setup sub functions
-    def create_report():
-        """build a new report from scan profile or custom"""
-        report = """"""
 
+def create_report():
+    """create a report file using scan_profile or custom params"""
+
+################################################################################
+# PROGRAM UTILS
+
+def banner_print(text_string, style_character='*'):
+    """print the input as a banner on the terminal"""
+
+    frame_line = style_character * (len(text_string) + 4)
+    print(frame_line)
+    print('{0} {1} {0}'.format(style_character, text_string))
+    print(frame_line)
+    print("")
+
+
+################################################################################
+# MAIN
 
 def main():
     """run setup module to begin interactive utility"""
