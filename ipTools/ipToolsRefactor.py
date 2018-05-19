@@ -18,18 +18,22 @@ def reports():
     """view, save, and export scan reports"""
 
 
-def banner_print(text_string):
+def banner_print(text_string, style_character='*'):
     """print the input as a banner on the terminal"""
-    banner_size = len(text_string)
+
+    frame_line = style_character * (len(text_string) + 4)
+    print(frame_line)
+    print('{0} {1} {0}'.format(style_character, text_string))
+    print(frame_line)
+    print("")
 
 
 def setup():
     """create a report or edit settings"""
 
     # print SETUP banner
-    print("***********")
-    print("*  SETUP  *")
-    print("")
+    banner_print("SETUP")
+    # print setup options
     print("[1] Create a Report")
     print("[2] Edit Settings")
     print("")
@@ -45,7 +49,13 @@ def setup():
     else:
         # bad selection, try again
         print("[-] ERROR: Bad selection, Try Again.")
+        # user fat fingers = call setup() again
         setup()
+
+    # setup sub functions
+    def create_report():
+        """build a new report from scan profile or custom"""
+        report = """"""
 
 
 def main():
