@@ -37,6 +37,7 @@ def setup():
     print("[1] Create a Report")
     print("[2] Edit Settings")
     print("")
+    # TODO: refactor options menus into function => print_options(options, iterator=number)
 
     # grab user input, handle bad selections
     setup_input = input("[+] Please Enter a Number: ")
@@ -57,8 +58,19 @@ def setup():
 def create_report():
     """create a report file using scan_profile or custom params"""
 
+    load_scan_profile = input('[+] Use a Scan Profile? (y or n) ')
+    if load_scan_profile == "y":
+        # Load scan_profile.txt and list profiles
+        scan_profiles = open('Setup_files/ipTools.config', 'r')
+
+        for line in scan_profiles.readlines():
+            # clean lines in dictionary file
+            config_line = line.strip('\r').strip('\n')
+            print("[+] config_line: ", config_line)
+
 ################################################################################
 # PROGRAM UTILS
+
 
 def banner_print(text_string, style_character='*'):
     """print the input as a banner on the terminal"""
@@ -75,7 +87,7 @@ def banner_print(text_string, style_character='*'):
 
 def main():
     """run setup module to begin interactive utility"""
-    print('[+] Starting Network Scanner... ')
+    print('[+] Starting Network Utility... ')
     setup()
 
 
