@@ -187,7 +187,7 @@ def portScan(tgtHost, tgtPorts):
         connScan(tgtHost, int(port))
 
 
-def mgmtModule(ipv4Ipaddress, ipv4AddrRange, ipv4HostList, portNumbers):
+def mgmtModule(ipv4Ipaddress, ipv4HostList, portNumbers):
     """ direct activity and control program """
 
     if len(ipv4HostList) == 1:
@@ -242,20 +242,19 @@ def parse():
         endNetIp = ipaddress.ip_address(
             str(checkHostBit[0]) + "." + str(checkHostBit[1]) + "." + str(checkHostBit[2]) + "." + str(254))
         print("[+] Network scan engaged, scanning targets from: " + str(startNetIp) + " to " + str(endNetIp))
-        ipv4AddrRange = ipaddress.ip_network(startNetIp, strict=False)
 
         for targetAddress in range(int(startNetIp), int(endNetIp)):
             ipv4HostList.append(ipaddress.IPv4Address(targetAddress))
     else:
-        ipv4AddrRange = ipv4Ipaddress
-        # no network flag = single target scan
+        pass
+        # no network flag == single target scan
 
     portNumbers = args.ports.split(",")
 
     if len(ipv4HostList) <= 1:
         # if not a network scan, add the single ip in the hostlist
         ipv4HostList.append(ipv4Ipaddress)
-    mgmtModule(ipv4Ipaddress, ipv4AddrRange, ipv4HostList, portNumbers)
+    mgmtModule(ipv4Ipaddress, ipv4HostList, portNumbers)
 
 
 if __name__ == '__main__':
