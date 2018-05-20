@@ -11,6 +11,7 @@ __pycache__/
 ProjectSettings.json
 slnx.sqlite
 .git
+.idea/
 
 # Distribution / packaging
 .Python

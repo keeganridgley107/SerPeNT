@@ -1,9 +1,6 @@
+"""template for modules to be added to iptools.py mgmt controller """
+
 import argparse
-from socket import *
-import ipaddress
-
-# Usage ipTools.py [-h] <address> -p <PORT,PORT,+>
-
 
 def main():
 
@@ -20,6 +17,7 @@ def main():
     # store the args values with a default port number
     ipaddress = args.address
     portNumbers = args.ports.split(",")
+
 
 if __name__ == '__main__':
     # call the main function
