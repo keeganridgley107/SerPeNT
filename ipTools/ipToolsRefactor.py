@@ -13,7 +13,7 @@ import ftplib
 # RECON
 
 
-def recon():
+def recon(report, scan_profile):
     """run scans and add results to report file"""
 
 
@@ -32,7 +32,7 @@ def setup():
     """create a report or edit settings"""
 
     # print SETUP banner
-    banner_print("SETUP")
+    banner_print("ipTools Setup")
     # print setup options
     print("[1] Create a Report")
     print("[2] Edit Settings")
@@ -41,13 +41,16 @@ def setup():
 
     # grab user input, handle bad selections
     setup_input = input("[+] Please Enter a Number: ")
+    print('')
     if setup_input == "1":
         # create a new report, scan_profile or custom
         create_report()
 
     elif setup_input == "2":
-        # edit the scan profiles / ipTools.config text files
-        x = 0
+        # edit the ipTools.config (scan_profiles) text file
+        # TODO: finish the edit settings module
+        setup()
+
     else:
         # bad selection, try again
         print("[-] ERROR: Bad selection, Try Again.")
@@ -59,13 +62,18 @@ def create_report():
     """create a report file using scan_profile or custom params"""
 
     banner_print("Create Report")
+    report_name = input('[+] Please enter a name for new report: ')
+    print('[+] Creating new report...')
+    report = {"Report_Name": report_name}
     load_scan_profile = input('[+] Use a Scan Profile? (y or n) ')
+    print('')
     if load_scan_profile == "y":
         # Load scan_profile.txt and list profiles
         scan_profiles = open('Setup_files/ipTools.config', 'r')
         scan_profiles_items = scan_profiles.readlines()
         scan_templates = []
 
+        banner_print('Scan Profiles')
         # loop populates scan_templates
         for line in scan_profiles_items:
             # clean lines in dictionary file
@@ -86,9 +94,20 @@ def create_report():
             print('[' + str(profile) + ']', ' ', scan_templates[profile]['Scan Name'])
         scan_profiles.close()
         scan_profile_id = input("[+] Please Enter a Number: ")
+        # TODO: needs input validation
+
         if int(scan_profile_id) <= len(scan_templates):
             # valid selection
             print("[+] Selected: ", scan_templates[int(scan_profile_id)]['Scan Name'])
+            print("[+] Adding Scan Profile to ", report_name, " file...")
+            report['Scan_profile'] = scan_templates[int(scan_profile_id)]
+            new_report = open("Reports/new_report_{}.txt".format(report_name), "w")
+            new_report.write("*" * 25)
+            new_report.write("ipTools {} Scan Report".format(report_name))
+            new_report.write("")
+            new_report.write("*" * 25)
+            new_report.close()
+            # TODO: finish module => call to recon(report, scan_profile) and pass results => reports(create, results)
     elif load_scan_profile == "n":
         # TODO: finish custom report creation module
         # create a new report based on custom scan_profile
@@ -96,6 +115,9 @@ def create_report():
         # ports to scan?
         # passive or active?
         # generate or load dict / rule files for target?
+
+        print("[-] ERROR: Module is not finished yet. Come back soon!")
+        create_report()
         pass
     else:
         # bad input son. try again.
