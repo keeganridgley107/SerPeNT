@@ -1,9 +1,8 @@
-"""interactive wireless network utility
-Usage: ipTools.py [-h]
+"""Guided wireless network utility
+Usage: ipToolsGuided.py
 """
 
 # IMPORT MODULES
-import argparse
 from socket import *
 import ipaddress
 import ftplib
@@ -15,7 +14,20 @@ import ftplib
 
 def recon(report, scan_profile):
     """run scans and add results to report file"""
-
+    banner_print('Recon')
+    print(report, " : report sent to recon, ", scan_profile, " : SP sent to recon")
+    # for each option in scan_profile user input = value
+    # if all options == valid input || default ; run scan
+    if scan_profile['Scan Name'] == 'network_scan':
+        # show default options, input == use_default bool if false; get user input & validate
+        # enumerate range of scan, show dialog then run() & write results to report
+        # todo: finish the recon module logic then refactor into smaller functions
+        pass
+    elif scan_profile['Scan Name'] == 'ip_scan':
+        # show default options, input == use_default bool if false; get user input & validate
+        # enumerate range of scan, show dialog then run() & write results to report
+        # todo: finish the recon module logic then refactor into smaller functions
+        pass
 
 ###############################################################################
 # REPORTS
@@ -104,10 +116,11 @@ def create_report():
             new_report = open("Reports/new_report_{}.txt".format(report_name), "w")
             new_report.write("*" * 25)
             new_report.write("ipTools {} Scan Report".format(report_name))
-            new_report.write("")
+            new_report.write("*" * 25)
+            new_report.writelines(["\n", scan_templates[int(scan_profile_id)]['Scan Name'], "\n"])
             new_report.write("*" * 25)
             new_report.close()
-            # TODO: finish module => call to recon(report, scan_profile) and pass results => reports(create, results)
+            recon(report, report['Scan_profile'])
     elif load_scan_profile == "n":
         # TODO: finish custom report creation module
         # create a new report based on custom scan_profile
