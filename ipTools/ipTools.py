@@ -105,7 +105,6 @@ def ipRange(start_ip, end_ip):
     """enumerates ip addresses from a range"""
     # currently creates a full LAN scan from any ip passed in
     # TODO: needs logic to create partial network scans i.e "10.2.24.26-206"
-    # TODO: create module to create port ranges i.e. 20-24, 80, 8000-8080
     start = list(map(int, start_ip.split(".")))
     # 12.13.14.15 => [12,13,14,15]
     end = list(map(int, end_ip.split(".")))
@@ -250,10 +249,23 @@ def parse():
         # no network flag == single target scan
 
     portNumbers = args.ports.split(",")
+    # TODO: this should be broken out as its own function
+    for port in portNumbers:
+        try:
+            # check for number 22 vs range 22-26
+            port_int = int(port)
+            port = port_int
+        except ValueError:
+            port_split = port.split("-")
+            port_range = range(int(port_split[0]), int(port_split[1]))
+            portNumbers.remove(port)
+            for new_port in port_range:
+                portNumbers.append(new_port)
 
     if len(ipv4HostList) <= 1:
         # if not a network scan, add the single ip in the hostlist
         ipv4HostList.append(ipv4Ipaddress)
+
     mgmtModule(ipv4Ipaddress, ipv4HostList, portNumbers)
 
 
