@@ -208,12 +208,12 @@ def parse():
 
     parser = argparse.ArgumentParser(prog='ipTools.py',
                                      description='''Automated Wireless Network Utility''',
-                                     epilog='''Created by KeyMan for The OrthoFi Security Project''',
-                                     usage='%(prog)s [-h] address [-n] [-p] [port,port,+]'
+                                     epilog='''Created by KeyM4n for The Lulz''',
+                                     usage='%(prog)s [-h] address [-n] [-p] [port-port,port,+]'
                                      )
     parser.add_argument("address", type=str, help="Target Address : 8.8.8.8 or google.com")
-    parser.add_argument("-p", "--ports", type=str, default="80", help="Ports to scan : 22,23,80")
-    parser.add_argument("-n", "--network", action="store_true", help="Scan network")
+    parser.add_argument("-p", "--ports", type=str, default="20-25,80,443,8000,8080", help="Ports to scan : 20-25,80")
+    parser.add_argument("-n", "--network", action="store_true", help="Scan network : X.X.X.1-254")
     args = parser.parse_args()
 
     ipv4HostList = []
