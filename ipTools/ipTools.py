@@ -105,7 +105,6 @@ def ipRange(start_ip, end_ip):
     """enumerates ip addresses from a range"""
     # currently creates a full LAN scan from any ip passed in
     # TODO: needs logic to create partial network scans i.e "10.2.24.26-206"
-    # TODO: create module to create port ranges i.e. 20-24, 80, 8000-8080
     start = list(map(int, start_ip.split(".")))
     # 12.13.14.15 => [12,13,14,15]
     end = list(map(int, end_ip.split(".")))
@@ -209,12 +208,12 @@ def parse():
 
     parser = argparse.ArgumentParser(prog='ipTools.py',
                                      description='''Automated Wireless Network Utility''',
-                                     epilog='''Created by KeyMan for The OrthoFi Security Project''',
-                                     usage='%(prog)s [-h] address [-n] [-p] [port,port,+]'
+                                     epilog='''Created by KeyM4n for The Lulz''',
+                                     usage='%(prog)s [-h] address [-n] [-p] [port-port,port,+]'
                                      )
     parser.add_argument("address", type=str, help="Target Address : 8.8.8.8 or google.com")
-    parser.add_argument("-p", "--ports", type=str, default="80", help="Ports to scan : 22,23,80")
-    parser.add_argument("-n", "--network", action="store_true", help="Scan network")
+    parser.add_argument("-p", "--ports", type=str, default="20-25,80,443,8000,8080", help="Ports to scan : 20-25,80")
+    parser.add_argument("-n", "--network", action="store_true", help="Scan network : X.X.X.1-254")
     args = parser.parse_args()
 
     ipv4HostList = []
@@ -250,10 +249,23 @@ def parse():
         # no network flag == single target scan
 
     portNumbers = args.ports.split(",")
+    # TODO: this should be broken out as its own function
+    for port in portNumbers:
+        try:
+            # check for number 22 vs range 22-26
+            port_int = int(port)
+            port = port_int
+        except ValueError:
+            port_split = port.split("-")
+            port_range = range(int(port_split[0]), int(port_split[1]))
+            portNumbers.remove(port)
+            for new_port in port_range:
+                portNumbers.append(new_port)
 
     if len(ipv4HostList) <= 1:
         # if not a network scan, add the single ip in the hostlist
         ipv4HostList.append(ipv4Ipaddress)
+
     mgmtModule(ipv4Ipaddress, ipv4HostList, portNumbers)
 
 

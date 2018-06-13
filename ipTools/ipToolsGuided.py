@@ -81,7 +81,7 @@ def create_report():
     print('')
     if load_scan_profile == "y":
         # Load scan_profile.txt and list profiles
-        scan_profiles = open('Setup_files/ipTools.config', 'r')
+        scan_profiles = open('../Setup_files/ipTools.config', 'r')
         scan_profiles_items = scan_profiles.readlines()
         scan_templates = []
 
@@ -106,20 +106,22 @@ def create_report():
             print('[' + str(profile) + ']', ' ', scan_templates[profile]['Scan Name'])
         scan_profiles.close()
         scan_profile_id = input("[+] Please Enter a Number: ")
-        # TODO: needs input validation
 
         if int(scan_profile_id) <= len(scan_templates):
             # valid selection
             print("[+] Selected: ", scan_templates[int(scan_profile_id)]['Scan Name'])
             print("[+] Adding Scan Profile to ", report_name, " file...")
+
             report['Scan_profile'] = scan_templates[int(scan_profile_id)]
-            new_report = open("Reports/new_report_{}.txt".format(report_name), "w")
+
+            new_report = open("../Reports/new_report_{}.txt".format(report_name), "w")
             new_report.write("*" * 25)
             new_report.write("ipTools {} Scan Report".format(report_name))
             new_report.write("*" * 25)
             new_report.writelines(["\n", scan_templates[int(scan_profile_id)]['Scan Name'], "\n"])
             new_report.write("*" * 25)
             new_report.close()
+
             recon(report, report['Scan_profile'])
     elif load_scan_profile == "n":
         # TODO: finish custom report creation module
