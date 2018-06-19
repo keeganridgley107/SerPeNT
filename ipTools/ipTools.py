@@ -24,16 +24,17 @@ def pingHost(host):
     Returns True if host (str) responds to a ping request.
     Remember that a host may not respond to a ping (ICMP) request even if the host name is valid.
     """
-    # TODO: add non-ICMP module check for hosts that fail ping
+    # TODO: hide ping system_call results, print isHostLive Y or N
 
     # Ping command count option as function of OS
     param = '-n' if system_name().lower() == 'windows' else '-c'
 
-    # Building the command. Ex: "ping -c 1 google.com"
+    # Building the command. "ping -c 1 google.com" for Unix || "ping -n 1 google.com" for windows
     command = ['ping', param, '1', host]
 
     # Pinging
-    return system_call(command) == 0
+    isHostLive = system_call(command) == 0
+    return isHostLive
 
 
 def ftpRecon(host, user, password):
@@ -194,6 +195,8 @@ def portScan(tgtHost, tgtPorts):
     try:
         # get ip from domain, if not valid throw error msg
         tgtIP = gethostbyname(str(tgtHost))
+        tgt = gethostname(tgtIP)
+        print(tgt, " HOOOOOOOOOSTNAME?")
     except:
         print("[-] Error: Unknown Host")
         exit(0)
@@ -201,8 +204,10 @@ def portScan(tgtHost, tgtPorts):
     try:
         # print the resolved domain, or the ip if no resolution
         tgtName = gethostbyaddr(tgtIP)
+        print("[+] Hostname IP resolution")
         print("-------- Scan Result for: " + tgtName[0] + " -----")
     except:
+        print("[-} Cannot resolve hostname")
         print("-------- Scan Result for: " + tgtIP + " -----")
 
     setdefaulttimeout(1)
@@ -210,11 +215,11 @@ def portScan(tgtHost, tgtPorts):
     canPingHost = pingHost(tgtIP)
     if canPingHost:
         print("[+] Host responds to ICMP Ping ")
+        for port in tgtPorts:
+            connScan(tgtHost, int(port))
     else:
         print("[-] No ICMP Ping response ")
 
-    for port in tgtPorts:
-        connScan(tgtHost, int(port))
 
 
 def mgmtModule(ipv4Ipaddress, ipv4HostList, portNumbers):
@@ -276,7 +281,13 @@ def parse():
         for targetAddress in range(int(startNetIp), int(endNetIp)):
             ipv4HostList.append(ipaddress.IPv4Address(targetAddress))
     else:
-        pass
+        domainCheck = ipv4Ipaddress.split(".")
+
+        if domainCheck[1] == "com" or "net" or "org":
+            # domain passed && network scan flag > get ip > generate network > portscan loop
+            domainIP = gethostbyname(str(ipv4Ipaddress))
+            ipv4Ipaddress = domainIP
+
         # no network flag == single target scan
 
     portNumbers = args.ports.split(",")
@@ -296,7 +307,7 @@ def parse():
     if len(ipv4HostList) <= 1:
         # if not a network scan, add the single ip in the hostlist
         ipv4HostList.append(ipv4Ipaddress)
-
+    print(ipv4Ipaddress, ipv4HostList, portNumbers)
     mgmtModule(ipv4Ipaddress, ipv4HostList, portNumbers)
 
 

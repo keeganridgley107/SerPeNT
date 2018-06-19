@@ -155,7 +155,7 @@ def banner_print(text_string, style_character='*'):
 
 ################################################################################
 # MAIN
-
+################################################################################
 def main():
     """run setup module to begin interactive utility"""
     print('[+] Starting Network Utility... ')
