@@ -8,6 +8,9 @@ from socket import *
 import ipaddress
 import ftplib
 
+###########################
+# Main TODO: add argv for passive / active ; tie to connect or print open ports logic 
+###########################
 
 ##########################################################################################
 # CURRENT MODULES : network scan / port scan / ftp password brute-force
@@ -51,6 +54,7 @@ def ftpModule(tgtHost):
     userName = input('Enter FTP UserName: ')
     passwordsFilePath = input('Enter path to Passwords.txt file: ')
 
+    # TODO: refactor to remove default creds => manual or dict.txt for both pass/user
 
     print('[+] Using default password for ' + targetHostAddress)
     if connect(targetHostAddress, userName, 'admin'):
@@ -67,14 +71,11 @@ def ftpModule(tgtHost):
         print('[-] FTP default login failed on host')
 
         # try brute force using dictionary file
-
-        # open dictionary file passwords.txt
         passwordsfile = open(passwordsFilePath, 'r')
 
         for line in passwordsfile.readlines():
             # clean lines in dictionary file
             password = line.strip('\r').strip('\n')
-            # print("[+] Testing: " + str(password))
 
             if connect(targetHostAddress, userName, password):
                 # password found
@@ -98,7 +99,7 @@ def ftpModule(tgtHost):
                 print("[-] Password: " + password)
                 print("-------------------------------------------------")
         else:
-            pass
+            print("[-] Error: Could not clean dict file!")
 
 
 def ipRange(start_ip, end_ip):
@@ -127,8 +128,12 @@ def ipRange(start_ip, end_ip):
 
 def printBanner(connSock, tgtPort, tgtHost):
     """module that prints banner info from port if open"""
+
     try:
         # send data to the target, if port 80 then send GET HTTP
+
+        # TODO: if argv (passive/active) ? connect port : print open port
+
         if tgtPort == 80:
             connSock.send("GET HTTP/1.1 \r\n")
         elif tgtPort == 21:
