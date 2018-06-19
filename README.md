@@ -1,27 +1,21 @@
 # ipTools
 
-Simple network and server auditing toolkit 
+Homebrew is a Python based network auditing toolkit by Keegan Ridgley.
  
 ---
 
 ## Install
 
-```git clone https://github.com/keeganridgley107/ipTools.git```
+to install IpTools open a terminal and run the following commands:
 
-```cd ipTools```
+``` 
+git clone https://github.com/keeganridgley107/ipTools.git &&
+cd ipTools
+```
+
+
 
 ## Usage
-##### Scan localhost for web server 
-```python ipTools.py localhost -p 80```
-##### Scan localhost for ftp, shh and telnet services 
-```python ipTools.py localhost -p 20-23```
-
-ipTools must be provided with an ip or domain name as an address
-
-The network flag will scan the entire host network
-
-Ports should be comma separated and can include ranges 
-
 
 ```
 usage: ipTools.py [-h] address [-n] [-p] [port,port-port,+]
@@ -37,11 +31,28 @@ optional arguments:
                         Ports to scan : 22,23-80
   -n, --network         Scan network
   ```
+  
+### Examples:
 
+---
 
+###### Scan localhost for web server 
 
+```python ipTools.py localhost -p 80```
 
+###### Scan localhost for ftp, ssh and telnet services 
 
+```python ipTools.py localhost -p 20-23```
 
-IpTools is still in development! 
+---
+
+### Notes:
+
+- ipTools must be provided with an ip or domain name as an address
+
+- The network flag will scan the entire host network
+
+- Ports should be comma separated and can include ranges 
+
+- IpTools is a hobby project still in development, check for future updates! 
 
