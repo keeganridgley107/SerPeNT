@@ -1,6 +1,6 @@
 # ipTools
 
-Homebrew is a Python based network auditing toolkit by Keegan Ridgley.
+ ipTools is a Python based network auditing toolkit by Keegan Ridgley.
  
 ---
 
