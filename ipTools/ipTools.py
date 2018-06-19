@@ -7,14 +7,34 @@ import argparse
 from socket import *
 import ipaddress
 import ftplib
+from platform import system as system_name  # Returns the system/OS name
+from subprocess import call as system_call  # Execute a shell command
 
 ###########################
-# Main TODO: add argv for passive / active ; tie to connect or print open ports logic 
+# Main TODO: add argv for passive / active ; tie to connect or print open ports logic
 ###########################
 
 ##########################################################################################
 # CURRENT MODULES : network scan / port scan / ftp password brute-force
 ##########################################################################################
+
+
+def pingHost(host):
+    """
+    Returns True if host (str) responds to a ping request.
+    Remember that a host may not respond to a ping (ICMP) request even if the host name is valid.
+    """
+    # TODO: add non-ICMP module check for hosts that fail ping
+
+    # Ping command count option as function of OS
+    param = '-n' if system_name().lower() == 'windows' else '-c'
+
+    # Building the command. Ex: "ping -c 1 google.com"
+    command = ['ping', param, '1', host]
+
+    # Pinging
+    return system_call(command) == 0
+
 
 def ftpRecon(host, user, password):
     """ recon ftp server once password is found """
@@ -169,7 +189,7 @@ def connScan(tgtHost, tgtPort):
 
 def portScan(tgtHost, tgtPorts):
     """ portScan is a badly named module """
-    # todo: rename this module to resolveHost or something
+    # todo: rename this module to resolveHost or anything else for fuck sake
 
     try:
         # get ip from domain, if not valid throw error msg
@@ -186,6 +206,12 @@ def portScan(tgtHost, tgtPorts):
         print("-------- Scan Result for: " + tgtIP + " -----")
 
     setdefaulttimeout(1)
+
+    canPingHost = pingHost(tgtIP)
+    if canPingHost:
+        print("[+] Host responds to ICMP Ping ")
+    else:
+        print("[-] No ICMP Ping response ")
 
     for port in tgtPorts:
         connScan(tgtHost, int(port))
