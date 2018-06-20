@@ -190,13 +190,11 @@ def connScan(tgtHost, tgtPort):
 
 def portScan(tgtHost, tgtPorts):
     """ portScan is a badly named module """
-    # todo: rename this module to resolveHost or anything else for fuck sake
+    # todo: THIS BREAKS EVERYTHING CURRENTLY handle the domaincheck / host ip resolution as a module
 
     try:
         # get ip from domain, if not valid throw error msg
         tgtIP = gethostbyname(str(tgtHost))
-        tgt = gethostname(tgtIP)
-        print(tgt, " HOOOOOOOOOSTNAME?")
     except:
         print("[-] Error: Unknown Host")
         exit(0)
@@ -221,11 +219,11 @@ def portScan(tgtHost, tgtPorts):
         print("[-] No ICMP Ping response ")
 
 
-
-def mgmtModule(ipv4Ipaddress, ipv4HostList, portNumbers):
+def mgmtModule(ipv4Ipaddress, ipv4HostList, portNumbers, isNetworkScan):
     """ direct activity and control program """
+    # TODO: refactor to use -n arg to control flow
 
-    if len(ipv4HostList) == 1:
+    if not isNetworkScan:
         # not a network, scan single IP address
         portScan(ipv4Ipaddress, portNumbers)
     else:
@@ -239,59 +237,50 @@ def main():
     parse()
 
 
-def parse():
-    """parse any arguments passed into the cmd line"""
+def domainCheck(ipv4Ipaddress):
 
-    parser = argparse.ArgumentParser(prog='ipTools.py',
-                                     description='''Automated Wireless Network Utility''',
-                                     epilog='''Created by KeyM4n for The Lulz''',
-                                     usage='%(prog)s [-h] address [-n] [-p] [port-port,port,+]'
-                                     )
-    parser.add_argument("address", type=str, help="Target Address : 8.8.8.8 or google.com")
-    parser.add_argument("-p", "--ports", type=str, default="20-25,80,443,8000,8080", help="Ports to scan : 20-25,80")
-    parser.add_argument("-n", "--network", action="store_true", help="Scan network : X.X.X.1-254")
-    args = parser.parse_args()
+    # check for domain name && network scan flag
+    domainCheck = ipv4Ipaddress.split(".")
+    hostName = gethostbyname(str(ipv4Ipaddress))
 
-    ipv4HostList = []
-
-    # store the args values with a default port number
-    ipv4Ipaddress = args.address
-    if args.network:
-        # check for domain name && network scan flag
-        domainCheck = ipv4Ipaddress.split(".")
-
+    try:
         if domainCheck[1] == "com" or "net" or "org":
             # domain passed && network scan flag > get ip > generate network > portscan loop
             domainIP = gethostbyname(str(ipv4Ipaddress))
             ipv4Ipaddress = domainIP
+    except IndexError:
+        isHostname = input("[-] Is target address a hostname? y/n ")
+        if isHostname == "y":
+            ipv4Ipaddress = hostName
+        else:
+            print("[-] ERROR: address cannot be resolved as IP, Domain or Host")
 
-        checkHostBit = list(map(int, ipv4Ipaddress.split(".")))
-        if checkHostBit[3] > 0:
-            # reset the host bit if the network flag is true
-            checkHostBit[3] = 0
+    return ipv4Ipaddress
 
-        # network address passed in and network flag = true
-        startNetIp = ipaddress.ip_address(
-            str(checkHostBit[0]) + "." + str(checkHostBit[1]) + "." + str(checkHostBit[2]) + "." + str(
-                checkHostBit[3]))
-        endNetIp = ipaddress.ip_address(
-            str(checkHostBit[0]) + "." + str(checkHostBit[1]) + "." + str(checkHostBit[2]) + "." + str(254))
-        print("[+] Network scan engaged, scanning targets from: " + str(startNetIp) + " to " + str(endNetIp))
 
-        for targetAddress in range(int(startNetIp), int(endNetIp)):
-            ipv4HostList.append(ipaddress.IPv4Address(targetAddress))
-    else:
-        domainCheck = ipv4Ipaddress.split(".")
+def networkOption(ipv4Ipaddress, ipv4HostList):
+    """check network scan option"""
 
-        if domainCheck[1] == "com" or "net" or "org":
-            # domain passed && network scan flag > get ip > generate network > portscan loop
-            domainIP = gethostbyname(str(ipv4Ipaddress))
-            ipv4Ipaddress = domainIP
+    ipv4Ipaddress = domainCheck(ipv4Ipaddress)
+    checkHostBit = list(map(int, ipv4Ipaddress.split(".")))
+    if checkHostBit[3] > 0:
+        # reset the host bit if the network flag is true
+        checkHostBit[3] = 0
 
-        # no network flag == single target scan
+    # network address passed in and network flag = true
+    startNetIp = ipaddress.ip_address(
+        str(checkHostBit[0]) + "." + str(checkHostBit[1]) + "." + str(checkHostBit[2]) + "." + str(
+            checkHostBit[3]))
+    endNetIp = ipaddress.ip_address(
+        str(checkHostBit[0]) + "." + str(checkHostBit[1]) + "." + str(checkHostBit[2]) + "." + str(254))
+    print("[+] Network scan engaged, scanning targets from: " + str(startNetIp) + " to " + str(endNetIp))
 
-    portNumbers = args.ports.split(",")
-    # TODO: this should be broken out as its own function
+    for targetAddress in range(int(startNetIp), int(endNetIp)):
+        ipv4HostList.append(ipaddress.IPv4Address(targetAddress))
+
+
+def portParse(portNumbers):
+    """parse the port numbers out of input args"""
     for port in portNumbers:
         try:
             # check for number 22 vs range 22-26
@@ -304,11 +293,37 @@ def parse():
             for new_port in port_range:
                 portNumbers.append(new_port)
 
-    if len(ipv4HostList) <= 1:
-        # if not a network scan, add the single ip in the hostlist
+
+def parse():
+    """parse any arguments passed into the cmd line"""
+
+    parser = argparse.ArgumentParser(prog='ipTools.py',
+                                     description='''Simple Wireless Network Utility''',
+                                     epilog='''Created by KeyM4n for The Lulz''',
+                                     usage='%(prog)s [-h] address [-n] [-p] [port-port,port,+]'
+                                     )
+    parser.add_argument("address", type=str, help="Target Address : 8.8.8.8 or google.com")
+    parser.add_argument("-p", "--ports", type=str, default="20-25,80,443,8000,8080", help="Ports to scan : 20-25,80")
+    parser.add_argument("-n", "--network", action="store_true", help="Scan network : X.X.X.1-254")
+    args = parser.parse_args()
+
+    ipv4HostList = []
+
+    # store the input args
+    ipv4Ipaddress = args.address
+    isNetworkScan = args.network
+    portNumbers = args.ports.split(",")
+
+    if isNetworkScan:
+        networkOption(ipv4Ipaddress, ipv4HostList)
+
+    # call the port parse module to handle port numbers
+    portParse(portNumbers)
+
+    if not isNetworkScan:
         ipv4HostList.append(ipv4Ipaddress)
-    print(ipv4Ipaddress, ipv4HostList, portNumbers)
-    mgmtModule(ipv4Ipaddress, ipv4HostList, portNumbers)
+    print("""Sent to mgmt module:\n\n""", ipv4Ipaddress, "\n", ipv4HostList, "\n", portNumbers, "\n", isNetworkScan)
+    # mgmtModule(ipv4Ipaddress, ipv4HostList, portNumbers, isNetworkScan)
 
 
 if __name__ == '__main__':
