@@ -126,7 +126,7 @@ def ftpModule(tgtHost):
 def ipRange(start_ip, end_ip):
     """enumerates ip addresses from a range"""
     # currently creates a full LAN scan from any ip passed in
-    # TODO: needs logic to create partial network scans i.e "10.2.24.26-206"
+    # TODO: needs logic to handle range scans i.e "10.2.24.26-206"
     start = list(map(int, start_ip.split(".")))
     # 12.13.14.15 => [12,13,14,15]
     end = list(map(int, end_ip.split(".")))
@@ -152,7 +152,6 @@ def printBanner(connSock, tgtPort, tgtHost):
 
     try:
         # send data to the target, if port 80 then send GET HTTP
-
         # TODO: if argv (passive/active) ? connect port : print open port
 
         if tgtPort == 80:
@@ -190,7 +189,6 @@ def connScan(tgtHost, tgtPort):
 
 def portScan(tgtHost, tgtPorts):
     """ portScan is a badly named module """
-    # todo: THIS BREAKS EVERYTHING CURRENTLY handle the domaincheck / host ip resolution as a module
 
     try:
         # get ip from domain, if not valid throw error msg
@@ -300,11 +298,13 @@ def parse():
     parser = argparse.ArgumentParser(prog='ipTools.py',
                                      description='''Simple Wireless Network Utility''',
                                      epilog='''Created by KeyM4n for The Lulz''',
-                                     usage='%(prog)s [-h] address [-n] [-p] [port-port,port,+]'
+                                     usage='%(prog)s [-h] address [-p] [port-port,port,+] [-n] [-c]'
                                      )
     parser.add_argument("address", type=str, help="Target Address : 8.8.8.8 or google.com")
     parser.add_argument("-p", "--ports", type=str, default="20-25,80,443,8000,8080", help="Ports to scan : 20-25,80")
     parser.add_argument("-n", "--network", action="store_true", help="Scan network : X.X.X.1-254")
+    parser.add_argument("-c", "--connect", action="store_true", help="Connect to discovered hosts")
+
     args = parser.parse_args()
 
     ipv4HostList = []
@@ -322,8 +322,8 @@ def parse():
 
     if not isNetworkScan:
         ipv4HostList.append(ipv4Ipaddress)
-    print("""Sent to mgmt module:\n\n""", ipv4Ipaddress, "\n", ipv4HostList, "\n", portNumbers, "\n", isNetworkScan)
-    # mgmtModule(ipv4Ipaddress, ipv4HostList, portNumbers, isNetworkScan)
+    # print("""Sent to mgmt module:\n\n""", ipv4Ipaddress, "\n", ipv4HostList, "\n", portNumbers, "\n", isNetworkScan)
+    mgmtModule(ipv4Ipaddress, ipv4HostList, portNumbers, isNetworkScan)
 
 
 if __name__ == '__main__':
