@@ -50,8 +50,6 @@ def ftpRecon(host, user, password):
         print("[+] FTP service: " + welcome)
         print("[+] Dir: " + ftpDir)
         print(" \n")
-
-
     except:
         # error
         print("[-] ERROR: ERRRORRRRRRR0RRR!!!!")
@@ -81,7 +79,7 @@ def ftpModule(tgtHost):
     print('[+] Using default password for ' + targetHostAddress)
     if connect(targetHostAddress, userName, 'admin'):
         print("")
-        print("-------------------LOGIN-FOUND-------------------")
+        print("------------DEFAULT-LOGIN-FOUND-------------------")
         print("")
         print("[+] FTP Login succeeded on host " + targetHostAddress)
         print("[+] UserName: " + userName)
@@ -238,6 +236,7 @@ def mgmtModule(ipv4Ipaddress, ipv4HostList, portNumbers, isNetworkScan, isConnec
 
     if isNetworkScan:
         # network scan, loop through address range
+        random.shuffle(ipv4HostList)
         for addr in ipv4HostList:
             resolveHost(addr, portNumbers, isConnectScan)
     else:
@@ -285,7 +284,8 @@ def networkOption(ipv4Ipaddress, ipv4HostList):
 
     for targetAddress in range(int(startNetIp), int(endNetIp)):
         ipv4HostList.append(ipaddress.IPv4Address(targetAddress))
-
+    print(ipv4HostList)
+    return ipv4HostList
 
 def portParse(portNumbers):
     """parse the port numbers out of input args"""
@@ -326,7 +326,7 @@ def parse():
     portNumbers = args.ports.split(",")
 
     if isNetworkScan:
-        networkOption(ipv4Ipaddress, ipv4HostList)
+        ipv4HostList = networkOption(ipv4Ipaddress, ipv4HostList)
     else:
         ipv4HostList.append(ipv4Ipaddress)
     # call the port parse module to handle port numbers
