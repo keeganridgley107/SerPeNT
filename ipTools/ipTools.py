@@ -191,7 +191,7 @@ def portScan(tgtHost, tgtPorts):
     """ portScan is a badly named module """
 
     try:
-        # get ip from domain, if not valid throw error msg
+        # get ip from domain, else throw error msg
         tgtIP = gethostbyname(str(tgtHost))
     except:
         print("[-] Error: Unknown Host")
@@ -228,11 +228,6 @@ def mgmtModule(ipv4Ipaddress, ipv4HostList, portNumbers, isNetworkScan):
         # network scan, loop through address range
         for addr in ipv4HostList:
             portScan(addr, portNumbers)
-
-
-def main():
-    # Parse args passed in then run mgmt module
-    parse()
 
 
 def domainCheck(ipv4Ipaddress):
@@ -297,7 +292,7 @@ def parse():
 
     parser = argparse.ArgumentParser(prog='ipTools.py',
                                      description='''Simple Wireless Network Utility''',
-                                     epilog='''Created by KeyM4n for The Lulz''',
+                                     epilog='''Created by K''',
                                      usage='%(prog)s [-h] address [-p] [port-port,port,+] [-n] [-c]'
                                      )
     parser.add_argument("address", type=str, help="Target Address : 8.8.8.8 or google.com")
@@ -310,20 +305,26 @@ def parse():
     ipv4HostList = []
 
     # store the input args
+    isConnectScan = args.connect
     ipv4Ipaddress = args.address
     isNetworkScan = args.network
     portNumbers = args.ports.split(",")
 
     if isNetworkScan:
         networkOption(ipv4Ipaddress, ipv4HostList)
-
+    else:
+        ipv4HostList.append(ipv4Ipaddress)
     # call the port parse module to handle port numbers
     portParse(portNumbers)
+    # print("Sent to mgmt module:\n")
+    # print(ipv4Ipaddress, "\n", ipv4HostList, "\n")
+    # print(portNumbers, "\n", isNetworkScan, "\n", isConnectScan)
+    mgmtModule(ipv4Ipaddress, ipv4HostList, portNumbers, isNetworkScan, isConnectScan)
 
-    if not isNetworkScan:
-        ipv4HostList.append(ipv4Ipaddress)
-    # print("""Sent to mgmt module:\n\n""", ipv4Ipaddress, "\n", ipv4HostList, "\n", portNumbers, "\n", isNetworkScan)
-    mgmtModule(ipv4Ipaddress, ipv4HostList, portNumbers, isNetworkScan)
+
+def main():
+    # Parse args passed in then run mgmt module
+    parse()
 
 
 if __name__ == '__main__':
