@@ -1,5 +1,5 @@
 """Automated wireless network utility
-Usage: ipTools.py [-h] ADDRESS [-n] [-p] <PORT,PORT,+>
+Usage: ipTools.py [-help] ADDRESS [-network] [-connect] [-ports] <PORT,PORT,+>
 """
 
 # IMPORT MODULES
@@ -47,7 +47,7 @@ def ftpRecon(host, user, password):
         ftpDir = ftp.dir()
         ftp.quit()
         print(" \n-------------------SCAN-REPORT-------------------")
-        print("[+] FTP service: " + welcome)
+        print("[+] FTP service: " + welcome + "\n")
         print("[+] Dir: " + ftpDir)
         print(" \n")
     except:
@@ -67,9 +67,9 @@ def connect(host, user, password):
 
 
 def ftpModule(tgtHost):
-    """Main module for ftp server tools"""
+    """Main module for ftp service tools"""
 
-    print('')
+    print('\n')
     targetHostAddress = tgtHost
     userName = input('Enter FTP UserName: ')
     passwordsFilePath = input('Enter path to Passwords.txt file: ')
@@ -78,14 +78,14 @@ def ftpModule(tgtHost):
 
     print('[+] Using default password for ' + targetHostAddress)
     if connect(targetHostAddress, userName, 'admin'):
-        print("")
+        print("\n")
         print("------------DEFAULT-LOGIN-FOUND-------------------")
-        print("")
+        print("\n")
         print("[+] FTP Login succeeded on host " + targetHostAddress)
         print("[+] UserName: " + userName)
         print("[+] Password: admin")
         print("-------------------------------------------------")
-        print("")
+        print("\n")
         ftpRecon(targetHostAddress, userName, "admin")
     else:
         print('[-] FTP default login failed on host')
@@ -99,27 +99,28 @@ def ftpModule(tgtHost):
 
             if connect(targetHostAddress, userName, password):
                 # password found
-                print("")
+                print("\n")
                 print("-------------------LOGIN-FOUND-------------------")
-                print("")
+                print("\n")
                 print("[+] FTP Login succeeded on host " + targetHostAddress)
                 print("[+] UserName: " + userName)
                 print("[+] Password: " + password)
                 print("-------------------SCAN-RESULTS------------------")
-                print("")
+                print("\n")
                 ftpRecon(targetHostAddress, userName, password)
-                print("")
+                print("\n")
                 exit(0)
 
             else:
                 # password NOT found
-                print("")
-                print("[-] FTP Login failed on host")
+                print("\n")
+                print("[-] FTP Login failed on host " + targetHostAddress)
                 print("[-] UserName: " + userName)
                 print("[-] Password: " + password)
                 print("-------------------------------------------------")
         else:
             print("[-] Error: Could not clean dict file!")
+            exit(0)
 
 
 def ipRange(start_ip, end_ip):
@@ -271,10 +272,10 @@ def networkOption(ipv4Ipaddress, ipv4HostList):
     ipv4Ipaddress = domainCheck(ipv4Ipaddress)
     checkHostBit = list(map(int, ipv4Ipaddress.split(".")))
     if checkHostBit[3] > 0:
-        # reset the host bit if the network flag is true
+        # reset the host bit 
         checkHostBit[3] = 0
 
-    # network address passed in and network flag = true
+    # network flag = true
     startNetIp = ipaddress.ip_address(
         str(checkHostBit[0]) + "." + str(checkHostBit[1]) + "." + str(checkHostBit[2]) + "." + str(
             checkHostBit[3]))
@@ -286,6 +287,7 @@ def networkOption(ipv4Ipaddress, ipv4HostList):
         ipv4HostList.append(ipaddress.IPv4Address(targetAddress))
     print(ipv4HostList)
     return ipv4HostList
+
 
 def portParse(portNumbers):
     """parse the port numbers out of input args"""
