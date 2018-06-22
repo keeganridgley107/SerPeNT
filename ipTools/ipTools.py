@@ -147,27 +147,42 @@ def ipRange(start_ip, end_ip):
     return ip_range
 
 
-def printBanner(connSock, tgtPort, tgtHost):
+def printBanner(connSock, tgtPort, tgtHost, isConnectScan):
     """module that prints banner info from port if open"""
+    if isConnectScan:
+        try:
+            # send data to the target, if port 80 then send GET HTTP
 
-    try:
-        # send data to the target, if port 80 then send GET HTTP
-        # TODO: if argv (passive/active) ? connect port : print open port
+            if tgtPort == 80:
+                connSock.send("GET HTTP/1.1 \r\n")
+            elif tgtPort == 21:
+                ftpModule(tgtHost)
+            else:
+                # if not port 80 then just send a carriage return
+                connSock.send("\r\n")
+            # receive data from the target, number is bytes for the buffer size
+            results = connSock.recv(4096)
+            # print the banner
+            print('[+] Banner:\n' + str(results))
+        except:
+            # if no banner, send fail msg
+            print('[-] Banner not available')
+    else:
+        try:
+            # send data to the target, if port 80 then send GET HTTP
 
-        if tgtPort == 80:
-            connSock.send("GET HTTP/1.1 \r\n")
-        elif tgtPort == 21:
-            ftpModule(tgtHost)
-        else:
-            # if not port 80 then just send a carriage return
-            connSock.send("\r\n")
-        # receive data from the target, number is bytes for the buffer size
-        results = connSock.recv(4096)
-        # print the banner
-        print('[+] Banner:\n' + str(results))
-    except:
-        # if no banner, send fail msg
-        print('[-] Banner not available')
+            if tgtPort == 80:
+                connSock.send("GET HTTP/1.1 \r\n")
+            else:
+                # if not port 80 then just send a carriage return
+                connSock.send("\r\n")
+            # receive data from the target, number is bytes for the buffer size
+            results = connSock.recv(4096)
+            # print the banner
+            print('[+] Banner:\n' + str(results))
+        except:
+            # if no banner, send fail msg
+            print('[-] Banner not available')
 
 
 def connScan(tgtHost, tgtPort):
@@ -187,8 +202,8 @@ def connScan(tgtHost, tgtPort):
         connSock.close()
 
 
-def portScan(tgtHost, tgtPorts):
-    """ portScan is a badly named module """
+def resolveHost(tgtHost, tgtPorts, isConnectScan):
+    """ Resolves the hostname / target ip """
 
     try:
         # get ip from domain, else throw error msg
@@ -217,17 +232,17 @@ def portScan(tgtHost, tgtPorts):
         print("[-] No ICMP Ping response ")
 
 
-def mgmtModule(ipv4Ipaddress, ipv4HostList, portNumbers, isNetworkScan):
+def mgmtModule(ipv4Ipaddress, ipv4HostList, portNumbers, isNetworkScan, isConnectScan):
     """ direct activity and control program """
     # TODO: refactor to use -n arg to control flow
 
-    if not isNetworkScan:
-        # not a network, scan single IP address
-        portScan(ipv4Ipaddress, portNumbers)
-    else:
+    if isNetworkScan:
         # network scan, loop through address range
         for addr in ipv4HostList:
-            portScan(addr, portNumbers)
+            resolveHost(addr, portNumbers, isConnectScan)
+    else:
+        # not a network, scan single IP address
+        resolveHost(ipv4Ipaddress, portNumbers, isConnectScan)
 
 
 def domainCheck(ipv4Ipaddress):
