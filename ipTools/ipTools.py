@@ -7,6 +7,7 @@ import argparse
 from socket import *
 import ipaddress
 import ftplib
+import random
 from platform import system as system_name  # Returns the system/OS name
 from subprocess import call as system_call  # Execute a shell command
 
@@ -45,15 +46,15 @@ def ftpRecon(host, user, password):
         welcome = ftp.getwelcome()
         ftpDir = ftp.dir()
         ftp.quit()
-        print("-------------------SCAN-REPORT-------------------")
+        print(" \n-------------------SCAN-REPORT-------------------")
         print("[+] FTP service: " + welcome)
         print("[+] Dir: " + ftpDir)
-        print("")
+        print(" \n")
 
 
     except:
         # error
-        x = "useless"
+        print("[-] ERROR: ERRRORRRRRRR0RRR!!!!")
 
 
 def connect(host, user, password):
@@ -233,8 +234,7 @@ def resolveHost(tgtHost, tgtPorts, isConnectScan):
 
 
 def mgmtModule(ipv4Ipaddress, ipv4HostList, portNumbers, isNetworkScan, isConnectScan):
-    """ direct activity and control program """
-    # TODO: refactor to use -n arg to control flow
+    """ direct activity and control program using top level args """
 
     if isNetworkScan:
         # network scan, loop through address range
