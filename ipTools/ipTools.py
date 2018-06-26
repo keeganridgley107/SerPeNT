@@ -272,7 +272,7 @@ def networkOption(ipv4Ipaddress, ipv4HostList):
     ipv4Ipaddress = domainCheck(ipv4Ipaddress)
     checkHostBit = list(map(int, ipv4Ipaddress.split(".")))
     if checkHostBit[3] > 0:
-        # reset the host bit 
+        # reset the host bit
         checkHostBit[3] = 0
 
     # network flag = true
