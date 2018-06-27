@@ -1,4 +1,4 @@
-"""Automated wireless network utility
+"""Simple network utility written in Python
 Usage: ipTools.py [-help] ADDRESS [-network] [-connect] [-ports] <PORT,PORT,+>
 """
 
@@ -9,7 +9,7 @@ import ipaddress
 import ftplib
 import random
 from platform import system as system_name  # Returns the system/OS name
-import subprocess # Execute a shell command
+import subprocess  # Execute a shell command
 
 ###########################
 # Main TODO: add argv for passive / active ; tie to connect or print open ports logic
@@ -75,10 +75,12 @@ def ftpModule(tgtHost):
 
     print('\n')
     targetHostAddress = tgtHost
+    # get input for user name / list.txt
     userName = input('Enter FTP UserName: ')
-    passwordsFilePath = input('Enter path to Passwords.txt file: ')
 
-    # TODO: refactor to remove default creds => manual or dict.txt for both pass/user
+    passwordsFilePath = "../Lists/" + input('Enter name of password list file: ')
+
+    # TODO: refactor to remove default / accept lists / handle clean file error
 
     print('[+] Using default password for ' + targetHostAddress)
     if connect(targetHostAddress, userName, 'admin'):
@@ -123,7 +125,7 @@ def ftpModule(tgtHost):
                 print("[-] Password: " + password)
                 print("-------------------------------------------------")
         else:
-            print("[-] Error: Could not clean dict file!")
+            print("[-] Error: Connection failed!")
             exit(0)
 
 
@@ -155,6 +157,7 @@ def ipRange(start_ip, end_ip):
 
 def printBanner(connSock, tgtPort, tgtHost, isConnectScan):
     """module that prints banner info from port if open"""
+    print(connSock, tgtPort, tgtHost, isConnectScan)
     if isConnectScan:
         try:
             # send data to the target, if port 80 then send GET HTTP
@@ -188,10 +191,10 @@ def printBanner(connSock, tgtPort, tgtHost, isConnectScan):
             print('[+] Banner:\n' + str(results))
         except:
             # if no banner, send fail msg
-            print('[-] Banner not available')
+            print('[-] Banner not available!')
 
 
-def connScan(tgtHost, tgtPort):
+def connScan(tgtHost, tgtPort, isConnectScan):
     """module connects to ports and prints response msg"""
     try:
         # create the socket object
@@ -199,7 +202,7 @@ def connScan(tgtHost, tgtPort):
         # try to connect with the target
         connSock.connect((tgtHost, tgtPort))
         print('[+] tcp port %d open' % tgtPort)
-        printBanner(connSock, tgtPort, tgtHost)
+        printBanner(connSock, tgtPort, tgtHost, isConnectScan)
     except:
         # print failure results
         print('[-] tcp port %d closed' % tgtPort)
@@ -233,11 +236,11 @@ def resolveHost(tgtHost, tgtPorts, isConnectScan):
     if canPingHost:
         print("[+] Host responds to ICMP Ping ")
         for port in tgtPorts:
-            connScan(tgtHost, int(port))
+            connScan(tgtHost, int(port), isConnectScan)
     else:
         print("[-] No ICMP Ping response ")
         for port in tgtPorts:
-            connScan(tgtHost, int(port))
+            connScan(tgtHost, int(port), isConnectScan)
 
 
 def mgmtModule(ipv4Ipaddress, ipv4HostList, portNumbers, isNetworkScan, isConnectScan):

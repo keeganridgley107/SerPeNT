@@ -1,0 +1,14 @@
+admin
+guest
+default
+password
+bestpass
+helloworld
+password1
+pand4s
+trustno1
+incorrect
+last_pass
+anonymous
+1nc0rrect!
+Password1!
