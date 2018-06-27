@@ -9,7 +9,7 @@ import ipaddress
 import ftplib
 import random
 from platform import system as system_name  # Returns the system/OS name
-from subprocess import call as system_call  # Execute a shell command
+import subprocess # Execute a shell command
 
 ###########################
 # Main TODO: add argv for passive / active ; tie to connect or print open ports logic
@@ -25,7 +25,6 @@ def pingHost(host):
     Returns True if host (str) responds to a ping request.
     Remember that a host may not respond to a ping (ICMP) request even if the host name is valid.
     """
-    # TODO: hide ping system_call results, print isHostLive Y or N
 
     # Ping command count option as function of OS
     param = '-n' if system_name().lower() == 'windows' else '-c'
@@ -34,7 +33,12 @@ def pingHost(host):
     command = ['ping', param, '1', host]
 
     # Pinging
-    isHostLive = system_call(command) == 0
+    # TODO: change to use check_output to not print pinging; only result
+    # hostInfo = subprocess.check_output(['ping', param, '1', host], shell=True).decode("utf-8")
+    # replyInfo = hostInfo.split("\n")
+    # replyInfo = replyInfo[2]
+
+    isHostLive = subprocess.call(command) == 0
     return isHostLive
 
 
@@ -127,10 +131,11 @@ def ipRange(start_ip, end_ip):
     """enumerates ip addresses from a range"""
     # currently creates a full LAN scan from any ip passed in
     # TODO: needs logic to handle range scans i.e "10.2.24.26-206"
+    print(start_ip, end_ip, " [+] starting ip range...")
     start = list(map(int, start_ip.split(".")))
     # 12.13.14.15 => [12,13,14,15]
     end = list(map(int, end_ip.split(".")))
-
+    print(start, " to ", end)
     temp = start
     ip_range = []
 
@@ -141,6 +146,7 @@ def ipRange(start_ip, end_ip):
             if temp[i] == 256:
                 temp[i] = 0
                 temp[i - 1] += 1
+                print("[+] Adding to list...")
         ip_range.append(".".join(map(str, temp)))
     print("[+] Scan range created from ", start, " to ", end)
     print("[+] ", len(ip_range), " IP addresses to scan")
@@ -230,6 +236,8 @@ def resolveHost(tgtHost, tgtPorts, isConnectScan):
             connScan(tgtHost, int(port))
     else:
         print("[-] No ICMP Ping response ")
+        for port in tgtPorts:
+            connScan(tgtHost, int(port))
 
 
 def mgmtModule(ipv4Ipaddress, ipv4HostList, portNumbers, isNetworkScan, isConnectScan):
@@ -252,7 +260,7 @@ def domainCheck(ipv4Ipaddress):
     hostName = gethostbyname(str(ipv4Ipaddress))
 
     try:
-        if domainCheck[1] == "com" or "net" or "org":
+        if domainCheck[1] == "com" or "net" or "org" or "io" or "gov" or "edu":
             # domain passed && network scan flag > get ip > generate network > portscan loop
             domainIP = gethostbyname(str(ipv4Ipaddress))
             ipv4Ipaddress = domainIP
@@ -262,6 +270,7 @@ def domainCheck(ipv4Ipaddress):
             ipv4Ipaddress = hostName
         else:
             print("[-] ERROR: address cannot be resolved as IP, Domain or Host")
+            exit(0)
 
     return ipv4Ipaddress
 
