@@ -225,7 +225,6 @@ def udp_connScan(tgtHost, port, isConnectScan):
         pass
 
 
-
 def resolveHost(tgtHost, tgtPorts, isConnectScan, isUdp):
     """ Resolves the hostname / target ip """
 
