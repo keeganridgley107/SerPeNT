@@ -211,7 +211,7 @@ def connScan(tgtHost, tgtPort, isConnectScan):
         connSock.close()
 
 
-def resolveHost(tgtHost, tgtPorts, isConnectScan):
+def resolveHost(tgtHost, tgtPorts, isConnectScan, isUdp):
     """ Resolves the hostname / target ip """
 
     try:
@@ -243,17 +243,17 @@ def resolveHost(tgtHost, tgtPorts, isConnectScan):
             connScan(tgtHost, int(port), isConnectScan)
 
 
-def mgmtModule(ipv4Ipaddress, ipv4HostList, portNumbers, isNetworkScan, isConnectScan):
+def mgmtModule(ipv4Ipaddress, ipv4HostList, portNumbers, isNetworkScan, isConnectScan, isUdp):
     """ direct activity and control program using top level args """
 
     if isNetworkScan:
         # network scan, loop through address range
         random.shuffle(ipv4HostList)
         for addr in ipv4HostList:
-            resolveHost(addr, portNumbers, isConnectScan)
+            resolveHost(addr, portNumbers, isConnectScan, isUdp)
     else:
         # not a network, scan single IP address
-        resolveHost(ipv4Ipaddress, portNumbers, isConnectScan)
+        resolveHost(ipv4Ipaddress, portNumbers, isConnectScan, isUdp)
 
 
 def domainCheck(ipv4Ipaddress):
@@ -325,16 +325,17 @@ def parse():
                                      usage='%(prog)s [-h] address [-p] [port-port,port,+] [-n] [-c]'
                                      )
     parser.add_argument("address", type=str, help="Target Address : 8.8.8.8 or google.com")
+    parser.add_argument("-u", "--udp", action="store_true", help="include UDP scan")
     parser.add_argument("-p", "--ports", type=str, default="20-25,80,443,8000,8080", help="Ports to scan : 20-25,80")
     parser.add_argument("-n", "--network", action="store_true", help="Scan network : X.X.X.1-254")
     parser.add_argument("-c", "--connect", action="store_true", help="Connect to discovered hosts")
 
     args = parser.parse_args()
-
     ipv4HostList = []
 
     # store the input args
     isConnectScan = args.connect
+    isUdp = args.udp
     ipv4Ipaddress = args.address
     isNetworkScan = args.network
     portNumbers = args.ports.split(",")
@@ -348,7 +349,7 @@ def parse():
     # print("Sent to mgmt module:\n")
     # print(ipv4Ipaddress, "\n", ipv4HostList, "\n")
     # print(portNumbers, "\n", isNetworkScan, "\n", isConnectScan)
-    mgmtModule(ipv4Ipaddress, ipv4HostList, portNumbers, isNetworkScan, isConnectScan)
+    mgmtModule(ipv4Ipaddress, ipv4HostList, portNumbers, isNetworkScan, isConnectScan, isUdp)
 
 
 def main():
