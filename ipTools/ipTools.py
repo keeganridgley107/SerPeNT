@@ -179,7 +179,6 @@ def printBanner(connSock, tgtPort, tgtHost, isConnectScan):
     else:
         try:
             # send data to the target, if port 80 then send GET HTTP
-
             if tgtPort == 80:
                 connSock.send("GET HTTP/1.1 \r\n")
             else:
@@ -211,8 +210,19 @@ def connScan(tgtHost, tgtPort, isConnectScan):
         connSock.close()
 
 
-def udp_connScan(tgtHost, param, isConnectScan):
+def udp_connScan(tgtHost, port, isConnectScan):
     """"connection scanner that uses UDP not TCP"""
+    try:
+        # create socket with AF_INET (ipv4) & Datagram (UDP)
+        connSock = socket(AF_INET, SOCK_DGRAM)
+        # try to connect with host
+        connSock.connect(tgtHost, port)
+        print("[+] UDP port %d open" % port)
+        printBanner(connSock, port, tgtHost, isConnectScan)
+    except:
+        # print fail msg
+        print('[-] UDP port %d closed' % port)
+        pass
 
 
 
