@@ -211,6 +211,11 @@ def connScan(tgtHost, tgtPort, isConnectScan):
         connSock.close()
 
 
+def udp_connScan(tgtHost, param, isConnectScan):
+    """"connection scanner that uses UDP not TCP"""
+
+
+
 def resolveHost(tgtHost, tgtPorts, isConnectScan, isUdp):
     """ Resolves the hostname / target ip """
 
@@ -227,20 +232,28 @@ def resolveHost(tgtHost, tgtPorts, isConnectScan, isUdp):
         print("[+] Hostname IP resolution")
         print("-------- Scan Result for: " + tgtName[0] + " -----")
     except:
-        print("[-} Cannot resolve hostname")
         print("-------- Scan Result for: " + tgtIP + " -----")
-
+    # set default timeout and ICMP ping host
     setdefaulttimeout(1)
-
     canPingHost = pingHost(tgtIP)
+    # if host is live print response
     if canPingHost:
         print("[+] Host responds to ICMP Ping ")
-        for port in tgtPorts:
-            connScan(tgtHost, int(port), isConnectScan)
+        pass
     else:
-        print("[-] No ICMP Ping response ")
+        # print("[-] No ICMP Ping response ")
+        # TODO: add a arg for show / hide closed hosts & ports
+        pass
+
+    # check protocol and run port scan loop
+    if isUdp:
         for port in tgtPorts:
-            connScan(tgtHost, int(port), isConnectScan)
+            port = int(port)
+            udp_connScan(tgtHost, port, isConnectScan)
+    else:
+        for port in tgtPorts:
+            port = int(port)
+            connScan(tgtHost, port, isConnectScan)
 
 
 def mgmtModule(ipv4Ipaddress, ipv4HostList, portNumbers, isNetworkScan, isConnectScan, isUdp):
@@ -346,9 +359,6 @@ def parse():
         ipv4HostList.append(ipv4Ipaddress)
     # call the port parse module to handle port numbers
     portParse(portNumbers)
-    # print("Sent to mgmt module:\n")
-    # print(ipv4Ipaddress, "\n", ipv4HostList, "\n")
-    # print(portNumbers, "\n", isNetworkScan, "\n", isConnectScan)
     mgmtModule(ipv4Ipaddress, ipv4HostList, portNumbers, isNetworkScan, isConnectScan, isUdp)
 
 
