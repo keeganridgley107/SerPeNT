@@ -1,8 +1,11 @@
 #!/usr/bin/env python3
+
 """
 Simple Python web server tool
 
 Usage: server.py
+
+Notes: still in dev! needs work on response type??  
 
 """
 

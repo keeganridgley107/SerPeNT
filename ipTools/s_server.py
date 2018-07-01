@@ -1,4 +1,14 @@
 #!/usr/bin/env python3
+
+"""
+Simple Static Server 
+
+Usage: ./s_server.py
+
+Notes: serves the contents of folder '/user/desktop/html/' on port 8000
+"""
+
+
 from http.server import HTTPServer, BaseHTTPRequestHandler
 import os
  
