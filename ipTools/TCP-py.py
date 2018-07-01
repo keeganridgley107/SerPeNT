@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 """template for modules to be added to iptools.py mgmt controller """
 
 import argparse

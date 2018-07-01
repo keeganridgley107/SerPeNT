@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 """
 Simple Python web server tool
 
@@ -23,6 +24,8 @@ import argparse
 
 def start_server(port_number):
     """start the server up on the user specified port number"""
+    # TODO: option starts a udp server using datagram protocol 
+    # server_udp = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
     server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     server.bind(('0.0.0.0', port_number))
     server.listen(10)
