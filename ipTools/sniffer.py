@@ -28,13 +28,14 @@ elif proto == 2:
     proto_value = socket.IPPROTO_TCP
 elif proto == 3:
     proto_value = socket.IPPROTO_UDP
-
+# use IPV4 / raw sockets / user input protocol to create sniffer object
 sniffer = socket.socket(socket.AF_INET, socket.SOCK_RAW, proto_value)
 
-# bind socket to localhost
+# bind socket to localhost machine (0.0.0.0)
+# use reserved unix port (0) to dynamically find open port
 sniffer.bind(('0.0.0.0', 0))
 
-# include IP header
+# use set socket option method to ensure IP header is included
 sniffer.setsockopt(socket.IPPROTO_IP, socket.IP_HDRINCL, 1)
 
 # print status message
