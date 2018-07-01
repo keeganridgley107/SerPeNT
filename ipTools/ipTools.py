@@ -1,6 +1,10 @@
 #!/usr/bin/env python3
-"""Simple network utility written in Python
+
+"""
+Simple network utility written in Python
+
 Usage: ipTools.py [-help] ADDRESS [-network] [-connect] [-ports] <PORT,PORT,+>
+
 """
 
 # IMPORT MODULES
