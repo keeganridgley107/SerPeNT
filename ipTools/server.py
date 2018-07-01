@@ -56,7 +56,7 @@ def parse():
 def serve_client(client_to_serve_socket, client_ip, port_number):
     client_request = client_to_serve_socket.recv(4096)
     print('[+] Received data from the client (%s:%d):%s' % (client_ip, port_number, client_request))
-    client_to_serve_socket.send("IpTools.server Version 1.0.2")
+    client_to_serve_socket.send(b"IpTools.server Version 1.0.2")
     client_to_serve_socket.close()
 
 
