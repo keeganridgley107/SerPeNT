@@ -47,9 +47,5 @@ Created by K
 
 ### Notes:
 
-- ipTools must be provided with an ip or domain name as an address
-- Use ipTools only in ways consistent with local laws, you are responsible for consent prior to scanning!
-- The network flag will scan the entire host network 
-- Ports should be comma separated and can include ranges 
-- IpTools is a hobby project still in development, check for future updates! 
+- Major refactor coming: name change, new modules, interactive menu and more!
 

@@ -1,7 +1,11 @@
-""""
-TCP traffic sniffer
+#!/usr/bin/env python3
+
+"""
+Simple TCP traffic sniffer
 
 Usage: tcp_sniff.py
+
+Notes: currently only sniffs localhost traffic
 
 """
 
@@ -33,7 +37,7 @@ class IPHeader(Structure):
     def __init__(self, data=None):
         # map source and destination ip address
         self.source_address = socket.inet_ntoa(struct.pack("@I", self.src))
-        # convert 32 bit IPV4 binary into human readable data 
+        # convert 32 bit IPV4 binary into human readable data
         self.destination_address = socket.inet_ntoa(struct.pack("@I", self.dst))
         # map protocols
         self.protocols = {1: "ICMP", 6: "TCP", 17: "UDP"}
@@ -41,6 +45,7 @@ class IPHeader(Structure):
             self.protocol = self.protocols[self.protocol_num]
         except:
             self.protocol = str(self.protocol_num)
+
 
 def init_tcp_socket():
     """Create TCP socket object"""

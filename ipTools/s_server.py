@@ -17,7 +17,7 @@ class StaticServer(BaseHTTPRequestHandler):
  
     def do_GET(self):
         root = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), 'html')
-        #print(self.path)
+        # print(self.path)
         if self.path == '/':
             filename = root + '/index.html'
         else:
@@ -31,7 +31,11 @@ class StaticServer(BaseHTTPRequestHandler):
         elif filename[-3:] == '.js':
             self.send_header('Content-type', 'application/javascript')
         elif filename[-4:] == '.ico':
-            self.send_header('Content-type', 'image/x-icon')
+            try:
+                self.send_header('Content-type', 'image/x-icon')
+            except:
+                # Annoying error, shitty fix.
+                pass
         else:
             self.send_header('Content-type', 'text/html')
         self.end_headers()
@@ -39,7 +43,8 @@ class StaticServer(BaseHTTPRequestHandler):
             html = fh.read()
             #html = bytes(html, 'utf8')
             self.wfile.write(html)
- 
+
+
 def run(server_class=HTTPServer, handler_class=StaticServer, port=8000):
     server_address = ('', port)
     httpd = server_class(server_address, handler_class)

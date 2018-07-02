@@ -27,7 +27,7 @@ import argparse
 
 def start_server(port_number):
     """start the server up on the user specified port number"""
-    # TODO: option starts a udp server using datagram protocol 
+    # TODO: arg option that starts a udp server using datagram protocol
     # server_udp = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
     server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     server.bind(('0.0.0.0', port_number))
@@ -35,11 +35,11 @@ def start_server(port_number):
     print('[+] Listening on port %d ...' % port_number)
 
     while True:
-        client,address = server.accept()
+        client, address = server.accept()
         print('[+] Connected with the client: %s:%d' % (address[0], address[1]))
 
         # multi-threading
-        serve_client_thread = threading.Thread(target=serve_client,args=(client,address[0],address[1]))
+        serve_client_thread = threading.Thread(target=serve_client, args=(client, address[0], address[1]))
         serve_client_thread.start()
 
 
@@ -59,7 +59,7 @@ def parse():
 def serve_client(client_to_serve_socket, client_ip, port_number):
     client_request = client_to_serve_socket.recv(4096)
     print('[+] Received data from the client (%s:%d):%s' % (client_ip, port_number, client_request))
-    client_to_serve_socket.send(b"IpTools.server Version 1.0.2")
+    client_to_serve_socket.send(b"IpTools.server Version 1.0.0")
     client_to_serve_socket.close()
 
 

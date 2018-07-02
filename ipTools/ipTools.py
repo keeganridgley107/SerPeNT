@@ -17,7 +17,7 @@ from platform import system as system_name  # Returns the system/OS name
 import subprocess  # Execute a shell command
 
 ###########################
-# Main TODO: add argv for passive / active ; tie to connect or print open ports logic
+# Main TODO: refactor / + multi-threading / + arg[report_closed]
 ###########################
 
 ##########################################################################################
