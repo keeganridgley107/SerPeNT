@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 
 """
-Simple Static Server 
+Simple Static Server HTML/JS/CSS
 
-Usage: ./s_server.py
+Usage: ./dir_serve.py
 
 Notes: serves the contents of folder '/user/desktop/html/' on port 8000
 """

