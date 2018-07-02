@@ -17,9 +17,9 @@ cd ipTools
 ## Usage
 
 ```
-usage: ipTools.py [-h] address [-n] [-c] [-p] [port,port-port,+]
+usage: ipTools.py [-h] address [-p] [port-port,port,+] [-n] [-c] [-u]
 
-Automated Wireless Network Utility
+Simple Wireless Network Utility
 
 positional arguments:
   address               Target Address : 8.8.8.8 or google.com
@@ -30,6 +30,7 @@ optional arguments:
                         Ports to scan : 20-25,80
   -n, --network         Scan network : X.X.X.1-254
   -c, --connect         Connect to discovered hosts
+  -u, --udp             include UDP scan
 
 Created by K
 ```

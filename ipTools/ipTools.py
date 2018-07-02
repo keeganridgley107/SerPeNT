@@ -85,7 +85,7 @@ def ftpModule(tgtHost):
 
     passwordsFilePath = "../Lists/" + input('Enter name of password list file: ')
 
-    # TODO: refactor to remove default / accept lists / handle clean file error
+    # TODO: refactor to remove default / handle clean file error
 
     print('[+] Using default password for ' + targetHostAddress)
     if connect(targetHostAddress, userName, 'admin'):
@@ -137,8 +137,7 @@ def ftpModule(tgtHost):
 def ipRange(start_ip, end_ip):
     """enumerates ip addresses from a range"""
     # currently creates a full LAN scan from any ip passed in
-    # TODO: needs logic to handle range scans i.e "10.2.24.26-206"
-    print(start_ip, end_ip, " [+] starting ip range...")
+    print(" [+] starting ip range...\n", start_ip, end_ip, "\n")
     start = list(map(int, start_ip.split(".")))
     # 12.13.14.15 => [12,13,14,15]
     end = list(map(int, end_ip.split(".")))
@@ -192,10 +191,10 @@ def printBanner(connSock, tgtPort, tgtHost, isConnectScan):
             # receive data from the target, number is bytes for the buffer size
             results = connSock.recv(4096)
             # print the banner
-            print('[+] Banner:\n' + str(results))
+            print('\n[+] Banner:\n' + str(results) + "\n")
         except:
             # if no banner, send fail msg
-            print('[-] Banner not available!')
+            print('\n[-] Banner not available!\n')
 
 
 def connScan(tgtHost, tgtPort, isConnectScan):
@@ -225,8 +224,8 @@ def udp_connScan(tgtHost, port, isConnectScan):
         print("[+] UDP port %d open" % port)
         printBanner(connSock, port, tgtHost, isConnectScan)
     except:
-        # print fail msg
-        print('[-] UDP port %d closed' % port)
+        # TODO: print fail msg if print_closed arg == True
+        # print('[-] UDP port %d closed' % port)
         pass
 
 
@@ -264,10 +263,12 @@ def resolveHost(tgtHost, tgtPorts, isConnectScan, isUdp):
         for port in tgtPorts:
             port = int(port)
             udp_connScan(tgtHost, port, isConnectScan)
-    else:
-        for port in tgtPorts:
-            port = int(port)
-            connScan(tgtHost, port, isConnectScan)
+        print("\n[+] Completed UDP Scan.\n")
+    # then run the tcp port scan loop
+    for port in tgtPorts:
+        port = int(port)
+        connScan(tgtHost, port, isConnectScan)
+    print("\n[+] Completed TCP Scan.\n")
 
 
 def mgmtModule(ipv4Ipaddress, ipv4HostList, portNumbers, isNetworkScan, isConnectScan, isUdp):
@@ -352,10 +353,10 @@ def parse():
                                      usage='%(prog)s [-h] address [-p] [port-port,port,+] [-n] [-c]'
                                      )
     parser.add_argument("address", type=str, help="Target Address : 8.8.8.8 or google.com")
-    parser.add_argument("-u", "--udp", action="store_true", help="include UDP scan")
     parser.add_argument("-p", "--ports", type=str, default="20-25,80,443,8000,8080", help="Ports to scan : 20-25,80")
     parser.add_argument("-n", "--network", action="store_true", help="Scan network : X.X.X.1-254")
     parser.add_argument("-c", "--connect", action="store_true", help="Connect to discovered hosts")
+    parser.add_argument("-u", "--udp", action="store_true", help="include UDP scan")
 
     args = parser.parse_args()
     ipv4HostList = []

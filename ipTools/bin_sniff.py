@@ -43,9 +43,10 @@ try:
 
     # get single packet
     print(sniffer.recvfrom(65535))
-    exit()
+    exit(0)
 except:
     # handle general errors, break out more in refactor
     print("[-] Error: Encountered a fatal error.")
+    # TODO: if windows && not admin == set runas=admin & try again
     print("[-] Exiting...")
     exit(0)
