@@ -37,6 +37,7 @@ def serve_client(client):
             client.send(user_input)
     except:
         print("[-] Client closed connection...")
+        exit(0)
         pass
 
 
