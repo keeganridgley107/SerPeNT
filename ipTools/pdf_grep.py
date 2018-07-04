@@ -6,9 +6,9 @@ import PyPDF2
 from platform import system as system_name  # Returns the system/OS name
 
 
-########################
-# TODO: input dir, open all pdfs in dir, search for text, copy results to report_file
-########################
+####################################################
+# TODO: pdfs are not translating to text properly...
+####################################################
 
 def get_pdf_dir():
     """get path to dir containing pdfs"""
@@ -51,17 +51,17 @@ def pdf_search_loop(dir_path):
         # open file
         if file.split(".")[1] == "pdf":
             print("[+] PDF Found...")
-            pdfFileObj = open(dir_path + file, 'rb')
+            pdfFileObj = open(dir_path + "\\" + file, 'rb')
 
             # creating a pdf reader object
             pdfReader = PyPDF2.PdfFileReader(pdfFileObj)
 
             # printing number of pages in pdf file
-            print(pdfReader.numPages)
+            print(pdfReader.numPages, " <= num pages ")
             # check if multi page and loop through pages if True
             if pdfReader.numPages > 0:
                 print("[+] Multi-page PDF found.")
-                for page in pdfReader.numPages:
+                for page in range(pdfReader.numPages):
                     multi_page_obj = pdfReader.getPage(int(page))
                     print("[+] Page data: ", multi_page_obj.extractText())
                     # TODO: GREP page data and append to results
@@ -79,13 +79,14 @@ def pdf_search_loop(dir_path):
             print("[-] File is not a pdf.")
             pass
     # end of files in path_dir loop, return the populated results array
+
     #######
     #TODO: return disabled during DEBUG process
     # return results
     #######
-    print("     END OF PROGRAM: RESULTS ARE\n")
+    print("\n\n    END OF PROGRAM: RESULTS ARE\n")
     for result in results:
-        print("[+] GREP_TEXT:\n", result)
+        print("[+] ", result)
     exit(0)
 
 
@@ -100,7 +101,10 @@ def write_to_report(results):
 def main():
     print("starting pdf_grep...")
     pdf_dir = get_pdf_dir()
+
+    # return disabled for debug
     results = pdf_search_loop(pdf_dir)
+    # method disabled for debug
     write_to_report(results)
 
 
