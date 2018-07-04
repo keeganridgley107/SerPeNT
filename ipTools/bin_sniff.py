@@ -48,5 +48,9 @@ except:
     # handle general errors, break out more in refactor
     print("[-] Error: Encountered a fatal error.")
     # TODO: if windows && not admin == set runas=admin & try again
+    if system_name().lower() == 'windows':
+        pass
+    else:
+        pass
     print("[-] Exiting...")
     exit(0)

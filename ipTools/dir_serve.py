@@ -1,13 +1,16 @@
 #!/usr/bin/env python3
 
 """
+
 Simple Static Server HTML/JS/CSS
 
 Usage: ./dir_serve.py
 
 Notes: serves the contents of folder '/user/desktop/html/' on port 8000
+
 """
 
+# todo: add validation for no dir user/desktop/html
 
 from http.server import HTTPServer, BaseHTTPRequestHandler
 import os
@@ -50,5 +53,6 @@ def run(server_class=HTTPServer, handler_class=StaticServer, port=8000):
     httpd = server_class(server_address, handler_class)
     print('Starting httpd on port {}'.format(port))
     httpd.serve_forever()
- 
+
+
 run()
