@@ -3,7 +3,7 @@ python reverse shell client program
 
 usage: python v_client.py
 
-todo: add args instead of input, test for cmd bugs/ exceptions
+todo:  test for cmd bugs/ exceptions/ unix/ linux/
 
 """
 
