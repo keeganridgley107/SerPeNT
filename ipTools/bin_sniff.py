@@ -8,6 +8,8 @@ Usage: bin_sniff.py
 """
 
 import socket
+from platform import system as system_name  # Returns the system/OS name
+
 
 # create raw socket sniffer object
 proto = int(input("""
@@ -16,7 +18,8 @@ proto = int(input("""
 [1] ICMP
 [2] TCP
 [3] UDP
-\nTYPE: """))
+
+TYPE: """))
 if proto != 1 and proto != 2 and proto != 3:
     print("[-] ERROR: Bad Selection! Using default: ICMP")
     proto_value = socket.IPPROTO_ICMP
@@ -44,13 +47,12 @@ try:
     # get single packet
     print(sniffer.recvfrom(65535))
     exit(0)
-except:
-    # handle general errors, break out more in refactor
+except Exception as e:
+    # handle general Windows10 raw sockets error, break out more in refactor
     print("[-] Error: Encountered a fatal error.")
-    # TODO: if windows && not admin == set runas=admin & try again
     if system_name().lower() == 'windows':
-        pass
+        print("[-] Error: Windows OS detected: Raw sockets is an issue on Windows, runas admin or try Linux?")
     else:
-        pass
+        print('[-] Error: Unknown error: ', e)
     print("[-] Exiting...")
     exit(0)
