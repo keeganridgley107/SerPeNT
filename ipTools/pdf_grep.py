@@ -27,37 +27,46 @@ def get_pdf_dir():
     return dir_path
 
 
-def pdf_search_loop(pdf_dir):
+def pdf_search_loop(dir_path):
     """LOOP over files in dir, open pdfs and copy text to results array"""
+    # init the results array
+    results = [{"PDF_GREP RESULTS ": dir_path}]
+    # print the start msg and dir path
+    print("[+] Starting: PDF grep loop on: %s" % dir_path)
+    # grab a list of the files in dir_path
+    dir_files = [f for f in os.listdir(dir_path) if isfile(join(dir_path, f))]
 
-    # TESTING DEBUG
-    print(pdf_dir)
-    results = pdf_dir
-    # TESTING DEBUG
-    ####################################################
-    # TODO: add a loop over the files in pdf_dir
-    ##########################pdf########################
-    # creating a pdf file object
-    pdfFileObj = open('example.pdf', 'rb')
+    for file in dir_files:
+        # open file
+        if file.split(".")[1] == "pdf":
+            print("[+] PDF Found...")
+            pdfFileObj = open(dir_path + file, 'rb')
 
-    # creating a pdf reader object
-    pdfReader = PyPDF2.PdfFileReader(pdfFileObj)
+            # creating a pdf reader object
+            pdfReader = PyPDF2.PdfFileReader(pdfFileObj)
 
-    # printing number of pages in pdf file
-    print(pdfReader.numPages)
+            # printing number of pages in pdf file
+            print(pdfReader.numPages)
+            # check if multi page and loop through pages if True
+            if pdfReader.numPages > 0:
+                print("[+] Multi=page PDF found.")
+                for page in pdfReader.numPages:
+                    multi_page_obj = pdfReader.getPage(int(page))
+                    print("[+] Page data: ", multi_page_obj.extractText())
+                    # TODO: GREP data and WRITE to results.txt
+                    results.append({"PDF_GREP: " + file + " page: %d" % int(page): multi_page_obj.extractText()})
+            # Single page pdf, proceed without looping through pages
+            pageObj = pdfReader.getPage(0)
+            print(pageObj.extractText())
+            # TODO: GREP data and WRITE to results.txt
 
-    # creating a page object
-    pageObj = pdfReader.getPage(0)
+            results.append({"PDF_GREP: " + file: pageObj.extractText()})
 
-    # extracting text from page
-    print(pageObj.extractText())
-
-    ##########################################################
-    # TODO: add a grep function here
-    ##########################################################
-
-    # closing the pdf file object
-    pdfFileObj.close()
+            # closing the pdf file object
+            pdfFileObj.close()
+        else:
+            # file is not a pdf, move along now...
+            pass
 
     return results
 
