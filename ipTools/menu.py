@@ -1,35 +1,46 @@
+"""
+
+Simple wireless network toolkit menu
+
+usage: python menu.py
+
+notes: TODO: import mods/ check fs/ valid input/ args pass/ error handling/
+
+"""
+
+import os
+from platform import system as system_name  # Returns the system/OS name
+
+
+def full_path(dir_name, location='Desktop'):
+    """takes in a folder on the desktop and returns a full path to it"""
+    # do a quick OS check then append dir path to home
+    if system_name().lower() == 'windows':
+        # else if windows path equals
+        desktop = os.path.join(os.path.join(os.environ['USERPROFILE']), location)
+    else:
+        # if unix desktop path equals
+        desktop = os.path.join(os.path.join(os.path.expanduser('~')), location)
+    dir_path = desktop + "\\" + dir_name
+    return dir_path
+
+
+def ban(text, style_character='*'):
+    """Frame the name with the style_character."""
+
+    frame_line = style_character * (len(text) + 4)
+    print(frame_line)
+    print('{0} {1} {0}'.format(style_character, text))
+    print(frame_line)
+
+
 
 def parse():
-    """parse any arguments passed into the cmd line"""
+    """parse any arguments needed then call modules"""
+    ban("\\= IPTOOLS =/", '#')
+    exit(0)
 
-    parser = argparse.ArgumentParser(prog='ipTools.py',
-                                     description='''Simple Wireless Network Utility''',
-                                     epilog='''Created by K''',
-                                     usage='%(prog)s [-h] address [-p] [port-port,port,+] [-n] [-c]'
-                                     )
-    parser.add_argument("address", type=str, help="Target Address : 8.8.8.8 or google.com")
-    parser.add_argument("-p", "--ports", type=str, default="20-25,80,443,8000,8080", help="Ports to scan : 20-25,80")
-    parser.add_argument("-n", "--network", action="store_true", help="Scan network : X.X.X.1-254")
-    parser.add_argument("-c", "--connect", action="store_true", help="Connect to discovered hosts")
-    parser.add_argument("-u", "--udp", action="store_true", help="include UDP scan")
 
-    args = parser.parse_args()
-    ipv4HostList = []
-
-    # store the input args
-    isConnectScan = args.connect
-    isUdp = args.udp
-    ipv4Ipaddress = args.address
-    isNetworkScan = args.network
-    portNumbers = args.ports.split(",")
-
-    if isNetworkScan:
-        ipv4HostList = networkOption(ipv4Ipaddress, ipv4HostList)
-    else:
-        ipv4HostList.append(ipv4Ipaddress)
-    # call the port parse module to handle port numbers
-    portParse(portNumbers)
-    mgmtModule(ipv4Ipaddress, ipv4HostList, portNumbers, isNetworkScan, isConnectScan, isUdp)
 
 
 def main():
