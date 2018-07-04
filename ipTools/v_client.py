@@ -50,13 +50,12 @@ def client_connect(host, port):
 def parse():
     """parse any arguments passed into the cmd line"""
 
-    parser = argparse.ArgumentParser(prog='ipTools.py',
-                                     description='''Simple Wireless Network Utility''',
-                                     epilog='''Created by K''',
-                                     usage='%(prog)s address [-p] [port] '
+    parser = argparse.ArgumentParser(prog='v_client.py',
+                                     description='''Simple Reverse Shell Client''',
+                                     usage='%(prog)s address [-p] [port]'
                                      )
     parser.add_argument("address", type=str, help="server Address : 8.8.8.8")
-    parser.add_argument("-p", "--port", type=int, default="9999", help="Port to connect on")
+    parser.add_argument("-p", "--port", type=int, default="9999", help="Port number : 9999")
 
     args = parser.parse_args()
 
