@@ -30,15 +30,17 @@ def full_path(folder, location='Desktop'):
     return dir_path
 
 
-def ban(text, style_character='*'):
+def ban(text, style_character='*', width=37):
     """Frame the name with the style_character."""
     print('\n')
-    frame_line = style_character * (37 - len(text))
+    frame_line = style_character * (width - len(text))
     print(frame_line)
     time.sleep(0.1)
-    print('{0} {1} {0}'.format(style_character, text))
+    print('{0} {1} {0}'.format(style_character, text).center(width - len(text), '#'))
     time.sleep(0.1)
     print(frame_line)
+    time.sleep(0.1)
+    print('\n')
     time.sleep(0.5)
 
 
@@ -63,11 +65,36 @@ def parse():
         [2] Servers
         [3] Sniffers
         """)
-    user_option = input('Select an option to continue...\n\n>')
-    print(user_option)
-    exit(0)
-    # welcome msg => help msg => main options => run
+    user_option = input('Select an option to continue...\n>')
+    cls()
+    if user_option != 1:
+        ban('Invalid Option', '!')
+        # bad selection, lets try this again...
+        parse()
+    main_options(int(user_option))
 
+
+def main_options(user_option):
+    """handle the main options and pass args to modules"""
+
+    if user_option == 1:
+        # SCANNER sub options here
+        ban('Scanner', '#')
+
+        # handle user_sub_option based on args needed for module
+
+    elif user_option == 2:
+        # SERVERS sub options here
+        ban('Servers', '#')
+    elif user_option == 3:
+        # SNIFFERS sub options here
+        ban('Sniffers', '#')
+    else:
+        ban('Invalid Option', '!')
+        parse()
+
+    print('Goodbye User...')
+    exit(0)
 
 #################################################################################
 
