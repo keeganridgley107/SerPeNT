@@ -32,20 +32,20 @@ def full_path(folder, location='Desktop'):
 
 def ban(text, style_character='*'):
     """Frame the name with the style_character."""
-
-    frame_line = style_character * (len(text) + 10)
+    print('\n')
+    frame_line = style_character * (37 - len(text))
     print(frame_line)
-    time.sleep(0.2)
+    time.sleep(0.1)
     print('{0} {1} {0}'.format(style_character, text))
-    time.sleep(0.2)
+    time.sleep(0.1)
     print(frame_line)
-    time.sleep(0.2)
-
+    time.sleep(0.5)
 
 
 def cls():
     """clear the screen via mass printing newline"""
     print('\n' * 100)
+
 
 #################################################################################
 
@@ -57,15 +57,15 @@ def parse():
     time.sleep(1)
     cls()
     ban('Options', '#')
-    user_option = input("""
-    
-    [1] Scanner
-    [2] Servers
-    [3] Sniffers
-    
-    Select an option to continue...
-    
-    >""")
+    print(
+        """
+        [1] Scanner
+        [2] Servers
+        [3] Sniffers
+        """)
+    user_option = input('Select an option to continue...\n\n>')
+    print(user_option)
+    exit(0)
     # welcome msg => help msg => main options => run
 
 
