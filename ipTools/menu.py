@@ -30,7 +30,7 @@ def full_path(folder, location='Desktop'):
     return dir_path
 
 
-def ban(text, style_character='*', width=37):
+def ban(text, style_character='*', width=37, lines=0):
     """Frame the name with the style_character."""
     print('\n')
     frame_line = style_character * (width - len(text))
@@ -39,8 +39,9 @@ def ban(text, style_character='*', width=37):
     print('{0} {1} {0}'.format(style_character, text).center(width - len(text), '#'))
     time.sleep(0.1)
     print(frame_line)
-    time.sleep(0.1)
-    print('\n')
+    for num in range(lines):
+        time.sleep(0.1)
+        print('\n')
     time.sleep(0.5)
 
 
@@ -55,23 +56,24 @@ def cls():
 def parse():
     """parse any arguments needed then call modules"""
 
-    ban("\\= IPTOOLS =/", '#')
-    time.sleep(1)
-    cls()
     ban('Options', '#')
     print(
         """
         [1] Scanner
         [2] Servers
         [3] Sniffers
+        [4] Exit
         """)
     user_option = input('Select an option to continue...\n>')
-    cls()
-    if user_option != 1:
-        ban('Invalid Option', '!')
-        # bad selection, lets try this again...
+    print(user_option)
+    try:
+        if int(user_option) < 4:
+            main_options(int(user_option))
+        else:
+            print('Goodbye User...')
+            exit(0)
+    except ValueError:
         parse()
-    main_options(int(user_option))
 
 
 def main_options(user_option):
@@ -82,10 +84,21 @@ def main_options(user_option):
         ban('Scanner', '#')
 
         # handle user_sub_option based on args needed for module
+        # 'scanner address [-p] [port-port,port,+] [-n] [-c]'
 
     elif user_option == 2:
         # SERVERS sub options here
-        ban('Servers', '#')
+        ban('Servers', '#', lines=1)
+        # list server modules
+        print(
+            """
+            [1] LAN File Sharing Server
+            [2] Reverse Shell Server (PyRat Listener)
+            [3] Back
+            """)
+        user_option = input('Select an option to continue...\n>')
+        if int(user_option) == 3:
+            parse()
     elif user_option == 3:
         # SNIFFERS sub options here
         ban('Sniffers', '#')
@@ -99,8 +112,16 @@ def main_options(user_option):
 #################################################################################
 
 
+def welcome():
+    """display banner clear screen & sleep thread 1 sec"""
+    ban("\\= IPTOOLS =/", '#')
+    time.sleep(1)
+    cls()
+
+
 def main():
     # Parse args passed in then run mgmt module
+    welcome()
     parse()
 
 
