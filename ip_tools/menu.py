@@ -12,6 +12,7 @@ import os
 from platform import system as system_name  # Returns the system/OS name
 import time
 import ipTools as scanner
+import tcp_sniff
 
 #################################################################################
 
@@ -80,7 +81,10 @@ def sub_options(user_option):
 
     if user_option == 1:
         # SCANNER sub options here
+
         ban('Scanner', '#')
+        # show banner and load scanner module
+        ip_scan = scanner
 
         # TODO: parse inputs to match call sig from scanner
         # 'scanner address [-p] [port-port,port,+] [-n] [-c]'
@@ -90,10 +94,12 @@ def sub_options(user_option):
         address = input('Enter ip address to target:\n>')
         port_numbers = input('Enter port numbers to target:\n>')
 
-        ip_scan = scanner
+
         # TODO: add parser into menu sub_option logic, pass parsed args to scanner.mgmtModule()
-        ip_scan.mgmtModule()
-        # SCANNER sub options here
+        # ip_scan.mgmtModule()
+
+        exit(0)
+        # END OF SCANNER sub options here
     elif user_option == 2:
         # SERVERS sub options here
 
@@ -113,14 +119,45 @@ def sub_options(user_option):
             main_options()
         elif user_option == 2:
             # REVERSE SHELL SERVER OPTIONS
-            pass
+            # CODE GOES HERE
+            # REVERSE SHELL SERVER OPTIONS
+            exit(0)
         elif user_option == 1:
             # LAN FILE SHARING SERVER
-            pass
-        # end server options
+            # CODE GOES HERE
+            # LAN FILE SHARING SERVER
+            exit(0)
+        # end server sub_options
     elif user_option == 3:
         # SNIFFERS sub options here
         ban('Sniffers', '#')
+        print(
+            """
+            [1] Binary Traffic Sniffer
+            [2] TCP/ICMP/UDP Traffic Sniffer
+            [3] Back
+            """)
+        user_option = input('Select an option to continue...\n>')
+        user_option = int(user_option)
+        # convert int from str
+        if user_option == 3:
+            # user selected back
+            main_options()
+        elif user_option == 2:
+            # TCP SNIFFER OPTIONS
+            ban("TCP_sniff")
+            sniff = tcp_sniff
+            try:
+                sniff.start_sniffing()
+            except KeyboardInterrupt:
+                print("[-] Ending the sniffer...")
+            # TCP SNIFFER OPTIONS
+            exit(0)
+        elif user_option == 1:
+            # LAN FILE SHARING SERVER
+            # CODE GOES HERE
+            # LAN FILE SHARING SERVER
+            exit(0)
         # SNIFFERS sub options here
     else:
         ban('Invalid Option', '!')
