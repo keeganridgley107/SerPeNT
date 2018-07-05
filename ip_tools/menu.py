@@ -11,7 +11,7 @@ notes: TODO: import mods/ check fs/ valid input/ args pass/ error handling/
 import os
 from platform import system as system_name  # Returns the system/OS name
 import time
-from ip_tools import ipTools as ips
+import ipTools as scanner
 
 #################################################################################
 
@@ -82,13 +82,17 @@ def sub_options(user_option):
         # SCANNER sub options here
         ban('Scanner', '#')
 
+        # TODO: parse inputs to match call sig from scanner
         # 'scanner address [-p] [port-port,port,+] [-n] [-c]'
-        is_lan_scan = input('Target or LAN scan? y/n\n>')
+
+        is_lan_scan = input('Target or LAN scan? T/L\n>')
         is_connect_scan = input('Attempt brute force connection to live hosts? y/n\n>')
         address = input('Enter ip address to target:\n>')
         port_numbers = input('Enter port numbers to target:\n>')
-        ipscan = ips
-        ipscan.main()
+
+        ip_scan = scanner
+        # TODO: add parser into menu sub_option logic, pass parsed args to scanner.mgmtModule()
+        ip_scan.mgmtModule()
         # SCANNER sub options here
     elif user_option == 2:
         # SERVERS sub options here
