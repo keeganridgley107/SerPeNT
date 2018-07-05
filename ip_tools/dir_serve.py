@@ -11,6 +11,8 @@ Notes: serves the contents of folder '/user/desktop/html/' on port 8000
 """
 
 # todo: add validation for no dir user/desktop/html
+# todo: add optional arg for other dir path
+# todo: add optional encrypt
 
 from http.server import HTTPServer, BaseHTTPRequestHandler
 import os
@@ -44,15 +46,19 @@ class StaticServer(BaseHTTPRequestHandler):
         self.end_headers()
         with open(filename, 'rb') as fh:
             html = fh.read()
-            #html = bytes(html, 'utf8')
+            # html = bytes(html, 'utf8')
             self.wfile.write(html)
 
 
 def run(server_class=HTTPServer, handler_class=StaticServer, port=8000):
-    server_address = ('', port)
-    httpd = server_class(server_address, handler_class)
-    print('Starting httpd on port {}'.format(port))
-    httpd.serve_forever()
+
+    try:
+        server_address = ('', port)
+        httpd = server_class(server_address, handler_class)
+        print('[+] Starting Python Folder Server on port {}'.format(port))
+        httpd.serve_forever()
+    except KeyboardInterrupt:
+        print("[-] Closing the Python Folder Server on port %s" % port)
 
 
 run()

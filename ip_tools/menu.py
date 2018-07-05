@@ -13,6 +13,10 @@ from platform import system as system_name  # Returns the system/OS name
 import time
 import ipTools as scanner
 import tcp_sniff
+import bin_sniff
+import dir_serve
+import v_server
+
 
 #################################################################################
 
@@ -94,11 +98,9 @@ def sub_options(user_option):
         address = input('Enter ip address to target:\n>')
         port_numbers = input('Enter port numbers to target:\n>')
 
-
         # TODO: add parser into menu sub_option logic, pass parsed args to scanner.mgmtModule()
-        # ip_scan.mgmtModule()
 
-        exit(0)
+        main_options()
         # END OF SCANNER sub options here
     elif user_option == 2:
         # SERVERS sub options here
@@ -119,14 +121,39 @@ def sub_options(user_option):
             main_options()
         elif user_option == 2:
             # REVERSE SHELL SERVER OPTIONS
-            # CODE GOES HERE
+            ban('Reverse Shell Server')
+            time.sleep(1)
+            py_rat_server = v_server
+            try:
+                # run iptools module
+                port_number = int(input('Enter a port for server to listen on\n>'))
+                print("[+] Starting Python Reverse Shell Listener on port %s..." % port_number)
+                py_rat_server.main(port_number)
+            except Exception as e:
+                print("[-] Error: Ending Reverse Shell Listener...")
+                # handle errors from run module and end socket connection if needed
+                time.sleep(1)
+                exit(0)
             # REVERSE SHELL SERVER OPTIONS
-            exit(0)
+            main_options()
         elif user_option == 1:
             # LAN FILE SHARING SERVER
-            # CODE GOES HERE
+            ban('File Sharing Server')
+            time.sleep(1)
+            folder_server = dir_serve
+            try:
+                # run iptools module
+                dir_port = int(input("Please enter a port number to serve folder on\n>"))
+                user_option = input('Press enter to begin serving contents of /Desktop/html\n>')
+                print("[+] Starting Python Folder Server on port %s..." % dir_port)
+                folder_server.run(port=dir_port)
+            except Exception as e:
+                print("[-] Error: Ending Reverse Shell Listener...")
+                # handle errors from run module and end socket connection if needed
+                time.sleep(1)
+                exit(0)
             # LAN FILE SHARING SERVER
-            exit(0)
+            main_options()
         # end server sub_options
     elif user_option == 3:
         # SNIFFERS sub options here
@@ -145,25 +172,37 @@ def sub_options(user_option):
             main_options()
         elif user_option == 2:
             # TCP SNIFFER OPTIONS
-            ban("TCP_sniff")
+            ban("Traffic Sniffer")
             sniff = tcp_sniff
+            press_key = input('Press Enter to begin Traffic Sniffer...\n>')
             try:
                 sniff.start_sniffing()
-            except KeyboardInterrupt:
-                print("[-] Ending the sniffer...")
+            except (KeyboardInterrupt, OSError):
+                print("[-] Error: Ending Traffic Sniffer...")
+                time.sleep(1)
             # TCP SNIFFER OPTIONS
-            exit(0)
+            main_options()
         elif user_option == 1:
-            # LAN FILE SHARING SERVER
-            # CODE GOES HERE
-            # LAN FILE SHARING SERVER
-            exit(0)
+            # BINARY SNIFFER OPTIONS
+            ban("Binary Sniffer")
+            time.sleep(1)
+            sniff = bin_sniff
+            press_key = input('Press Enter to begin Binary Sniffer...\n>')
+            try:
+                sniff.start_sniffing()
+                # run iptools module
+            except (KeyboardInterrupt, OSError):
+                print("[-] Error: Ending Binary Sniffer...")
+                time.sleep(1)
+            # BINARY SNIFFER OPTIONS
+            main_options()
         # SNIFFERS sub options here
     else:
         ban('Invalid Option', '!')
+        time.sleep(1)
         main_options()
 
-    print('Goodbye User...')
+    print('Exiting IpTools...')
     exit(0)
 
 #################################################################################
