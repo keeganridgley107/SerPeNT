@@ -14,8 +14,9 @@ import time
 import ipTools as scanner
 import tcp_sniff
 import bin_sniff
-import dir_serve
+import dir_serve3
 import v_server
+import web_crawl
 
 
 #################################################################################
@@ -66,15 +67,15 @@ def main_options():
         [1] Scanner
         [2] Servers
         [3] Sniffers
-        [4] Exit
+        [4] Scrapers
+        [5] Exit
         """)
     user_option = input('Select an option to continue...\n>')
-    print(user_option)
     try:
-        if int(user_option) < 4:
+        if int(user_option) < 5:
             sub_options(int(user_option))
         else:
-            print('Goodbye User...')
+            print('Exiting IpTools...')
             exit(0)
     except ValueError:
         main_options()
@@ -101,7 +102,7 @@ def sub_options(user_option):
         # TODO: add parser into menu sub_option logic, pass parsed args to scanner.mgmtModule()
 
         main_options()
-        # END OF SCANNER sub options here
+    # SCANNER sub options
     elif user_option == 2:
         # SERVERS sub options here
 
@@ -140,21 +141,21 @@ def sub_options(user_option):
             # LAN FILE SHARING SERVER
             ban('File Sharing Server')
             time.sleep(1)
-            folder_server = dir_serve
+            folder_server = dir_serve3
             try:
                 # run iptools module
-                dir_port = int(input("Please enter a port number to serve folder on\n>"))
-                user_option = input('Press enter to begin serving contents of /Desktop/html\n>')
-                print("[+] Starting Python Folder Server on port %s..." % dir_port)
-                folder_server.run(port=dir_port)
+                # dir_port = int(input("Please enter a port number to serve folder on\n>"))
+                user_option = input('Press enter to begin serving contents of /home\n>')
+                # print("[+] Starting Python Folder Server on port %s..." % dir_port)
+                folder_server.run()
             except Exception as e:
-                print("[-] Error: Ending Reverse Shell Listener...")
+                print("[-] Error: Ending Folder Server...")
                 # handle errors from run module and end socket connection if needed
                 time.sleep(1)
-                exit(0)
+                main_options()
             # LAN FILE SHARING SERVER
             main_options()
-        # end server sub_options
+    # SERVER sub options
     elif user_option == 3:
         # SNIFFERS sub options here
         ban('Sniffers', '#')
@@ -196,14 +197,57 @@ def sub_options(user_option):
                 time.sleep(1)
             # BINARY SNIFFER OPTIONS
             main_options()
-        # SNIFFERS sub options here
+    # SNIFFERS sub options
+    elif user_option == 4:
+        # Scrapers sub options here
+
+        ban('Scrapers', '#', lines=1)
+        # list server modules
+        print(
+            """
+            [1] HTML links -> CSV
+            [2] Back
+            """)
+        user_option = input('Select an option to continue...\n>')
+        user_option = int(user_option)
+        # convert int from str
+        if user_option == 2:
+            # user selected back
+            main_options()
+        elif user_option == 1:
+            # SCRAPER SUB OPTIONS
+            ban('HTML Link Scraper')
+            time.sleep(1)
+            # create instance of iptool in local scope
+            link_scraper = web_crawl
+            try:
+                # run iptools module
+                link_scraper.get_site()
+                ban("WIN")
+                print("[+] Links added to /ip_tools/index.csv file")
+                time.sleep(0.2)
+                print("[+] Returning to main menu...")
+                time.sleep(1)
+                cls()
+            except Exception as e:
+                print("[-] Error: Ending HTML Link Scraper...")
+                # handle errors from run module and end socket connection if needed
+                print("[-] Error Message: %s " % e)
+                time.sleep(1)
+                # no need to kill menu.py, return to main to try again or exit gracefully
+                main_options()
+            # SCRAPER SUB OPTIONS
+            main_options()
+
+        # end HTML_scraper sub options
+    # SCRAPER sub options
     else:
         ban('Invalid Option', '!')
         time.sleep(1)
         main_options()
 
-    print('Exiting IpTools...')
-    exit(0)
+    # hacky error handler for cli calls
+    main_options()
 
 #################################################################################
 
