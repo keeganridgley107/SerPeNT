@@ -3,7 +3,7 @@
 """
 Simple network utility written in Python
 
-Usage: ipTools.py [-help] ADDRESS [-network] [-connect] [-ports] <PORT,PORT,+>
+Usage: scanner.py [-help] ADDRESS [-network] [-connect] [-ports] <PORT,PORT,+>
 
 """
 
@@ -347,7 +347,7 @@ def portParse(portNumbers):
 def parse():
     """parse any arguments passed into the cmd line"""
 
-    parser = argparse.ArgumentParser(prog='ipTools.py',
+    parser = argparse.ArgumentParser(prog='scanner.py',
                                      description='''Simple Wireless Network Utility''',
                                      epilog='''Created by K''',
                                      usage='%(prog)s [-h] address [-p] [port-port,port,+] [-n] [-c]'

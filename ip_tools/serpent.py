@@ -11,7 +11,7 @@ notes: TODO: import mods/ check fs/ valid input/ args pass/ error handling/
 import os
 from platform import system as system_name  # Returns the system/OS name
 import time
-import ipTools as scanner
+import scanner
 import tcp_sniff
 import bin_sniff
 import dir_serve3
@@ -94,10 +94,10 @@ def sub_options(user_option):
         # TODO: parse inputs to match call sig from scanner
         # 'scanner address [-p] [port-port,port,+] [-n] [-c]'
 
-        is_lan_scan = input('Target or LAN scan? T/L\n>')
-        is_connect_scan = input('Attempt brute force connection to live hosts? y/n\n>')
         address = input('Enter ip address to target:\n>')
         port_numbers = input('Enter port numbers to target:\n>')
+        is_lan_scan = input('Target or LAN scan? T/L\n>')
+        is_connect_scan = input('Attempt brute force connection to live hosts? y/n\n>')
 
         # TODO: add parser into menu sub_option logic, pass parsed args to scanner.mgmtModule()
 
@@ -256,7 +256,7 @@ def sub_options(user_option):
 def welcome():
     """display banner clear screen & sleep thread 1 sec"""
     cls()
-    ban("\\= IPTOOLS =/", '#')
+    ban("\\= SerPeNT =/", '#')
     time.sleep(1)
     print('\n')
     time.sleep(0.1)
