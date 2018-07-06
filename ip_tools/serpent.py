@@ -1,8 +1,8 @@
 """
 
-Simple wireless network toolkit menu
+Serpent: Simple wireless network toolkit
 
-usage: python menu.py
+usage: python serpent.py
 
 notes: TODO: import mods/ check fs/ valid input/ args pass/ error handling/
 
@@ -248,6 +248,7 @@ def sub_options(user_option):
 
     # hacky error handler for cli calls
     main_options()
+
 
 #################################################################################
 

@@ -1,13 +1,23 @@
 
-# ipTools
+# SerPeNT
+###### The Simple Python Network Toolkit
 
-ipTools is a :snake: based network auditing toolkit.
+Serpent is a simple cross platform :snake: based interactive network toolkit.
+It allows users to perform several simple networking tasks without much thought.
+
+#### Features Include:
+    IP/Port Scanner
+    Vulnerabilty Scanner
+    Packet Sniffer
+    Python RAT
+    Web Scraper
+    Static File Server
 
 ---
 
 ## Install
 
-to install IpTools open a terminal and run the following command:
+to install Serpent open a terminal and run the following command:
 
 ``` 
 git clone https://github.com/keeganridgley107/ipTools.git &&
@@ -15,6 +25,36 @@ cd ipTools
 ```
 
 ## Usage
+
+To use serpent in a terminal run 
+
+```python3 serpent.py```
+ 
+then select the tool you want to use from the options menu
+
+```
+##############################
+########## Options ###########
+##############################
+
+        [1] Scanner
+        [2] Servers
+        [3] Sniffers
+        [4] Scrapers
+        [5] Exit
+
+Select an option to continue...
+>
+```
+
+---------
+
+## Serpent Tools 
+
+All of the tools in Serpent can be accessed individually. 
+This allows advanced users to use features not yet included in serpent.py 
+
+### Scanner
 
 ```
 usage: ipTools.py [-h] address [-p] [port-port,port,+] [-n] [-c] [-u]
@@ -47,5 +87,7 @@ Created by K
 
 ### Notes:
 
-- Major refactor coming: name change, new modules, interactive menu and more!
+- Serpent is a work in progress. 
+- use at your own risk 
+- only use on networks own. 
 

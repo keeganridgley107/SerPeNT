@@ -12,6 +12,7 @@ Notes: serves the contents of folder '/user/desktop/html/' on port 8000
 # todo: make it work again
 
 from http.server import HTTPServer, BaseHTTPRequestHandler
+from platform import system as system_name  # Returns the system/OS name
 import os
  
  
@@ -50,6 +51,21 @@ class StaticServer(BaseHTTPRequestHandler):
                 self.wfile.write(html)
         except:
             print("[-] Error: Error: Error")
+
+
+def full_path(folder, location='Desktop'):
+    """takes in name of folder and location and returns a full path to it"""
+    # TODO: connect this to an input to get folder to share if not /desktop/html
+
+    # do a quick OS check then append dir path to location, default is 'Desktop'
+    if system_name().lower() == 'windows':
+        # else if windows path equals
+        path = os.path.join(os.path.join(os.environ['USERPROFILE']), location)
+    else:
+        # if unix desktop path equals
+        path = os.path.join(os.path.join(os.path.expanduser('~')), location)
+    dir_path = path + "\\" + folder
+    return dir_path
 
 
 def run(server_class=HTTPServer, handler_class=StaticServer, port=8000):
