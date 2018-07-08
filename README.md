@@ -31,7 +31,7 @@ cd ipTools
 
 To use serpent in a terminal run 
 
-```python3 serpent.py```
+```python serpent.py```
  
 then select the tool you want to use from the options menu
 
