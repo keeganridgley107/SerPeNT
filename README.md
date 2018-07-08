@@ -5,7 +5,7 @@
 
 Serpent is a simple cross platform :snake: based interactive network toolkit.
 
-It was created make to performing several simple networking tasks without much thought.
+It was created make to performing several networking tasks as simple as possible.
 
 #### Features Include:
 
