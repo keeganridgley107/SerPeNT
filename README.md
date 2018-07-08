@@ -1,17 +1,20 @@
 
 # SerPeNT
+
 ###### The Simple Python Network Toolkit
 
 Serpent is a simple cross platform :snake: based interactive network toolkit.
-It allows users to perform several simple networking tasks without much thought.
+
+It was created make to performing several simple networking tasks without much thought.
 
 #### Features Include:
-    IP/Port Scanner
-    Vulnerabilty Scanner
-    Packet Sniffer
-    Python RAT
-    Web Scraper
-    Static File Server
+
+- IP/Port Scanner
+- Vulnerability Scanner
+- Packet Sniffer
+- Python RAT
+- Web Scraper
+- Static File Server
 
 ---
 
@@ -47,12 +50,12 @@ Select an option to continue...
 >
 ```
 
----------
-
 ## Serpent Tools 
 
 All of the tools in Serpent can be accessed individually. 
 This allows advanced users to use features not yet included in serpent.py 
+
+----
 
 ### Scanner
 
@@ -75,17 +78,19 @@ optional arguments:
 Created by K
 ```
 
-### Examples:
+#### Scanner Examples:
 
 ###### Scan localhost for http web server 
 
-```python ipTools.py localhost -p 80```
+```python scanner.py localhost -p 80```
 
 ###### Scan localhost for ftp service and connect if found
 
 ```python ipTools.py localhost -c -p20```
 
-### Notes:
+-----------
+
+## Notes
 
 - Serpent is a work in progress. 
 - use at your own risk 
