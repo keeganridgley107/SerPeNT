@@ -1,6 +1,6 @@
 """
 
-Serpent: Simple wireless network toolkit
+SerPeNT: Simple Python Network Toolkit
 
 usage: python serpent.py
 

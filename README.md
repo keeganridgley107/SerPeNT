@@ -75,7 +75,6 @@ optional arguments:
   -c, --connect         Connect to discovered hosts
   -u, --udp             include UDP scan
 
-Created by K
 ```
 
 #### Scanner Examples:
@@ -87,6 +86,30 @@ Created by K
 ###### Scan localhost for ftp service and connect if found
 
 ```python ipTools.py localhost -c -p20```
+
+-----------
+
+
+### Static file server 
+
+```
+usage: dir_serve.py 
+
+Simple LAN file server 
+
+Notes: serves any files in Dektop/html over LAN at localhost:8000
+
+```
+
+#### Static File Server Example:
+
+###### Create html folder and serve hello_world.txt over LAN 
+
+```
+cd ~/Desktop && mkdir html
+cd html && echo "HELLO WORLD!" > hello_world.txt
+cd ../serpent/ip_tools && python dir_serve.py
+```
 
 -----------
 
