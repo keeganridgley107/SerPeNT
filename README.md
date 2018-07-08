@@ -23,8 +23,8 @@ It was created make to performing several networking tasks as simple as possible
 to install Serpent open a terminal and run the following command:
 
 ``` 
-git clone https://github.com/keeganridgley107/ipTools.git &&
-cd ipTools
+git clone https://github.com/keeganridgley107/serpent.git &&
+cd serpent
 ```
 
 ## Usage
@@ -60,9 +60,9 @@ This allows advanced users to use features not yet included in serpent.py
 ### Scanner
 
 ```
-usage: ipTools.py [-h] address [-p] [port-port,port,+] [-n] [-c] [-u]
+usage: scanner.py [-h] address [-p] [port-port,port,+] [-n] [-c] [-u]
 
-Simple Wireless Network Utility
+Simple Python Port Scanner
 
 positional arguments:
   address               Target Address : 8.8.8.8 or google.com
@@ -89,7 +89,6 @@ optional arguments:
 
 -----------
 
-
 ### Static file server 
 
 ```
@@ -109,6 +108,19 @@ Notes: serves any files in Dektop/html over LAN at localhost:8000
 cd ~/Desktop && mkdir html
 cd html && echo "HELLO WORLD!" > hello_world.txt
 cd ../serpent/ip_tools && python dir_serve.py
+```
+
+-----------
+
+### Web Scraper 
+
+```
+usage: web_crawl.py 
+
+Simple Python Web Scraper  
+
+Notes: Creates a CSV file, or adds a new line for every link found on a webpage
+
 ```
 
 -----------

@@ -191,10 +191,10 @@ def printBanner(connSock, tgtPort, tgtHost, isConnectScan):
             # receive data from the target, number is bytes for the buffer size
             results = connSock.recv(4096)
             # print the banner
-            print('\n[+] Banner:\n' + str(results) + "\n")
+            print('[+] Banner:\n' + str(results))
         except:
             # if no banner, send fail msg
-            print('\n[-] Banner not available!\n')
+            print('[-] Banner not available!')
 
 
 def connScan(tgtHost, tgtPort, isConnectScan):
@@ -208,7 +208,8 @@ def connScan(tgtHost, tgtPort, isConnectScan):
         printBanner(connSock, tgtPort, tgtHost, isConnectScan)
     except:
         # print failure results
-        print('[-] tcp port %d closed' % tgtPort)
+        # print('[-] tcp port %d closed' % tgtPort)
+        pass
     finally:
         # close the socket object
         connSock.close()
@@ -342,6 +343,8 @@ def portParse(portNumbers):
             portNumbers.remove(port)
             for new_port in port_range:
                 portNumbers.append(new_port)
+    # return is to handle basic scan calls from serpent.py
+    return portNumbers
 
 
 def parse():
@@ -373,8 +376,8 @@ def parse():
     else:
         ipv4HostList.append(ipv4Ipaddress)
     # call the port parse module to handle port numbers
-    portParse(portNumbers)
-    mgmtModule(ipv4Ipaddress, ipv4HostList, portNumbers, isNetworkScan, isConnectScan, isUdp)
+    parsed_port_numbers = portParse(portNumbers)
+    mgmtModule(ipv4Ipaddress, ipv4HostList, parsed_port_numbers, isNetworkScan, isConnectScan, isUdp)
 
 
 def main():

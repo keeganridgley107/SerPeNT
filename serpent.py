@@ -12,12 +12,12 @@ notes: TODO: import mods/ check fs/ valid input/ args pass/ error handling/
 import os
 from platform import system as system_name  # Returns the system/OS name
 import time
-import scanner
-import tcp_sniff
-import bin_sniff
-import dir_serve3
-import v_server
-import web_crawl
+import ip_tools.scanner as scanner
+import ip_tools.tcp_sniff as tcp_sniff
+import ip_tools.bin_sniff as bin_sniff
+import ip_tools.dir_serve3 as dir_serve3
+import ip_tools.v_server as v_server
+import ip_tools.web_crawl as web_crawl
 
 
 #################################################################################
@@ -96,9 +96,23 @@ def sub_options(user_option):
         # 'scanner address [-p] [port-port,port,+] [-n] [-c]'
 
         address = input('Enter ip address to target:\n>')
-        port_numbers = input('Enter port numbers to target:\n>')
-        is_lan_scan = input('Target or LAN scan? T/L\n>')
-        is_connect_scan = input('Attempt brute force connection to live hosts? y/n\n>')
+        port_numbers = input('Enter port numbers to target:\n>').split(",")
+        # is_lan_scan = input('LAN scan? y/n\n>')
+        # is_connect_scan = input('Attempt brute force connection to live hosts? y/n\n>')
+        try:
+            # clean port num input
+            parsed_port_numbers = ip_scan.portParse(port_numbers)
+            print(parsed_port_numbers)
+        except Exception as e:
+            print("[-] Error parsing ports: %s \n[-]Error msg: %s" % (port_numbers, e))
+        try:
+            # basic single target scan
+            # TODO: auto get ip address -> scan LAN -> no address / port input ; select serv
+            ip_scan.resolveHost(address, parsed_port_numbers, isConnectScan=False, isUdp=False)
+            pass
+        except:
+            print("[-] Error: Scanner exited... is %s the correct target?" % address)
+            pass
 
         # TODO: add parser into menu sub_option logic, pass parsed args to scanner.mgmtModule()
 
