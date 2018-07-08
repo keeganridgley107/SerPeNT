@@ -3,14 +3,14 @@
 
 ###### The Simple Python Network Toolkit
 
-Serpent is a simple cross platform :snake: based interactive network toolkit.
+Serpent is a simple :snake: based interactive network toolkit.
 
-It was created make to performing several networking tasks as simple as possible.
-
+The aim is to automate several networking and security related tasks in a small interactive program.
+ 
 #### Features Include:
 
 - IP/Port Scanner
-- Vulnerability Scanner
+- Banner Grabber
 - Packet Sniffer
 - Python RAT
 - Web Scraper
@@ -89,7 +89,7 @@ optional arguments:
 
 -----------
 
-### Static file server 
+### Static File Server 
 
 ```
 usage: dir_serve.py 
@@ -128,6 +128,6 @@ Notes: Creates a CSV file, or adds a new line for every link found on a webpage
 ## Notes
 
 - Serpent is a work in progress. 
-- use at your own risk 
-- only use on networks own. 
+- use at your own risk on networks you own. 
+- check back for updates! 
 

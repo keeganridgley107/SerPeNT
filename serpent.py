@@ -277,7 +277,7 @@ def welcome():
     time.sleep(0.1)
     print('\n')
     time.sleep(0.1)
-    ban("= Created by K =", '#', lines=2)
+    ban("= Simple Python Network Toolkit =", '#', width=70, lines=2)
     time.sleep(1)
     print('\n')
     time.sleep(0.1)
