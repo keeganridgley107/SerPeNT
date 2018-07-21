@@ -111,6 +111,7 @@ venv.bak/
 .mypy_cache/
 
 # CSV / txt
-/Lists
+pass_dict.txt
+users_dict.txt
 .csv
 .DS_Store

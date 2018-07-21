@@ -1,5 +1,0 @@
-current status:
-    working on menu.py
-        main_options() works
-        sub_options() is in development for scanner
-        sub_options() for all other main_options == not started

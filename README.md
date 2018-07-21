@@ -5,7 +5,7 @@
 
 Serpent is a simple cross platform :snake: based interactive network toolkit.
 
-It was created make to performing several networking tasks as simple as possible.
+It was created to make several networking tasks as simple as possible.
 
 #### Features Include:
 
@@ -23,13 +23,13 @@ It was created make to performing several networking tasks as simple as possible
 to install Serpent open a terminal and run the following command:
 
 ``` 
-git clone https://github.com/keeganridgley107/serpent.git &&
+git clone https://github.com/keeganridgley107/serpent.git 
 cd serpent
 ```
 
 ## Usage
 
-To use serpent in a terminal run 
+To use serpent the following command in a terminal:
 
 ```python serpent.py```
  
@@ -77,7 +77,7 @@ optional arguments:
 
 ```
 
-#### Scanner Examples:
+#### Scanner Examples
 
 ###### Scan localhost for http web server 
 
