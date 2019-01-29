@@ -73,58 +73,57 @@ def connect(host, user, password):
         return False
 
 
-def ftpModule(tgtHost):
+def ftp_module(target_host):
     """Main module for ftp service tools"""
 
     print('\n')
-    targetHostAddress = tgtHost
     # get input for user name / list.txt
-    userName = input('Enter FTP UserName: ')
+    user_name = input('Enter FTP UserName: ')
 
-    passwordsFilePath = "../Lists/" + input('Enter name of password list file: ')
+    passwords_file_path = "../Lists/" + input('Enter name of password list file: ')
 
     # TODO: refactor to remove default / handle clean file error
 
-    print('[+] Using default password for ' + targetHostAddress)
-    if connect(targetHostAddress, userName, 'admin'):
+    print('[+] Using default password for ' + target_host)
+    if connect(target_host, user_name, 'admin'):
         print("\n")
         print("------------DEFAULT-LOGIN-FOUND-------------------")
         print("\n")
-        print("[+] FTP Login succeeded on host " + targetHostAddress)
-        print("[+] UserName: " + userName)
+        print("[+] FTP Login succeeded on host " + target_host)
+        print("[+] UserName: " + user_name)
         print("[+] Password: admin")
         print("-------------------------------------------------")
         print("\n")
-        ftp_recon(targetHostAddress, userName, "admin")
+        ftp_recon(target_host, user_name, "admin")
     else:
         print('[-] FTP default login failed on host')
 
         # try brute force using dictionary file
-        passwordsfile = open(passwordsFilePath, 'r')
+        passwords_file = open(passwords_file_path, 'r')
 
-        for line in passwordsfile.readlines():
+        for line in passwords_file.readlines():
             # clean lines in dictionary file
             password = line.strip('\r').strip('\n')
 
-            if connect(targetHostAddress, userName, password):
+            if connect(target_host, user_name, password):
                 # password found
                 print("\n")
                 print("-------------------LOGIN-FOUND-------------------")
                 print("\n")
-                print("[+] FTP Login succeeded on host " + targetHostAddress)
-                print("[+] UserName: " + userName)
+                print("[+] FTP Login succeeded on host " + target_host)
+                print("[+] UserName: " + user_name)
                 print("[+] Password: " + password)
                 print("-------------------SCAN-RESULTS------------------")
                 print("\n")
-                ftp_recon(targetHostAddress, userName, password)
+                ftp_recon(target_host, user_name, password)
                 print("\n")
                 exit(0)
 
             else:
                 # password NOT found
                 print("\n")
-                print("[-] FTP Login failed on host " + targetHostAddress)
-                print("[-] UserName: " + userName)
+                print("[-] FTP Login failed on host " + target_host)
+                print("[-] UserName: " + user_name)
                 print("[-] Password: " + password)
                 print("-------------------------------------------------")
         else:
@@ -132,7 +131,8 @@ def ftpModule(tgtHost):
             exit(0)
 
 
-def ipRange(start_ip, end_ip):
+# noinspection PyListCreation
+def ip_range(start_ip, end_ip):
     """enumerates ip addresses from a range"""
     # currently creates a full LAN scan from any ip passed in
     print(" [+] starting ip range...\n", start_ip, end_ip, "\n")
@@ -141,9 +141,9 @@ def ipRange(start_ip, end_ip):
     end = list(map(int, end_ip.split(".")))
     print(start, " to ", end)
     temp = start
-    ip_range = []
+    ip_address_range = []
 
-    ip_range.append(start_ip)
+    ip_address_range.append(start_ip)
     while temp != end:
         start[3] += 1
         for i in (3, 2, 1):
@@ -151,28 +151,28 @@ def ipRange(start_ip, end_ip):
                 temp[i] = 0
                 temp[i - 1] += 1
                 print("[+] Adding to list...")
-        ip_range.append(".".join(map(str, temp)))
+        ip_address_range.append(".".join(map(str, temp)))
     print("[+] Scan range created from ", start, " to ", end)
-    print("[+] ", len(ip_range), " IP addresses to scan")
-    return ip_range
+    print("[+] ", len(ip_address_range), " IP addresses to scan")
+    return ip_address_range
 
 
-def printBanner(connSock, tgtPort, tgtHost, isConnectScan):
+def print_banner(conn_sock, tgt_port, tgt_host, is_connect_scan):
     """module that prints banner info from port if open"""
-    print(connSock, tgtPort, tgtHost, isConnectScan)
-    if isConnectScan:
+    print(conn_sock, tgt_port, tgt_host, is_connect_scan)
+    if is_connect_scan:
         try:
             # send data to the target, if port 80 then send GET HTTP
 
-            if tgtPort == 80:
-                connSock.send("GET HTTP/1.1 \r\n")
-            elif tgtPort == 21:
-                ftpModule(tgtHost)
+            if tgt_port == 80:
+                conn_sock.send("GET HTTP/1.1 \r\n")
+            elif tgt_port == 21:
+                ftp_module(tgt_host)
             else:
                 # if not port 80 then just send a carriage return
-                connSock.send("\r\n")
+                conn_sock.send("\r\n")
             # receive data from the target, number is bytes for the buffer size
-            results = connSock.recv(4096)
+            results = conn_sock.recv(4096)
             # print the banner
             print('[+] Banner:\n' + str(results))
         except:
@@ -181,13 +181,13 @@ def printBanner(connSock, tgtPort, tgtHost, isConnectScan):
     else:
         try:
             # send data to the target, if port 80 then send GET HTTP
-            if tgtPort == 80:
-                connSock.send("GET HTTP/1.1 \r\n")
+            if tgt_port == 80:
+                conn_sock.send("GET HTTP/1.1 \r\n")
             else:
                 # if not port 80 then just send a carriage return
-                connSock.send("\r\n")
+                conn_sock.send("\r\n")
             # receive data from the target, number is bytes for the buffer size
-            results = connSock.recv(4096)
+            results = conn_sock.recv(4096)
             # print the banner
             print('[+] Banner:\n' + str(results))
         except:
@@ -195,61 +195,61 @@ def printBanner(connSock, tgtPort, tgtHost, isConnectScan):
             print('[-] Banner not available!')
 
 
-def connScan(tgtHost, tgtPort, isConnectScan):
+def conn_scan(tgt_host, tgt_port, is_connect_scan):
     """module connects to ports and prints response msg"""
     try:
         # create the socket object
-        connSock = socket(AF_INET, SOCK_STREAM)
+        conn_sock = socket(AF_INET, SOCK_STREAM)
         # try to connect with the target
-        connSock.connect((tgtHost, tgtPort))
-        print('[+] tcp port %d open' % tgtPort)
-        printBanner(connSock, tgtPort, tgtHost, isConnectScan)
+        conn_sock.connect((tgt_host, tgt_port))
+        print('[+] tcp port %d open' % tgt_port)
+        print_banner(conn_sock, tgt_port, tgt_host, is_connect_scan)
     except:
         # print failure results
         # print('[-] tcp port %d closed' % tgtPort)
         pass
     finally:
         # close the socket object
-        connSock.close()
+        conn_sock.close()
 
 
-def udp_connScan(tgtHost, port, isConnectScan):
+def udp_conn_scan(tgt_host, port, is_connect_scan):
     """"connection scanner that uses UDP not TCP"""
     try:
         # create socket with AF_INET (ipv4) & Datagram (UDP)
-        connSock = socket(AF_INET, SOCK_DGRAM)
+        conn_sock = socket(AF_INET, SOCK_DGRAM)
         # try to connect with host
-        connSock.connect(tgtHost, port)
+        conn_sock.connect(tgt_host, port)
         print("[+] UDP port %d open" % port)
-        printBanner(connSock, port, tgtHost, isConnectScan)
+        print_banner(conn_sock, port, tgt_host, is_connect_scan)
     except:
         # TODO: print fail msg if print_closed arg == True
         # print('[-] UDP port %d closed' % port)
         pass
 
 
-def resolveHost(tgtHost, tgtPorts, isConnectScan, isUdp):
+def resolve_host(tgt_host, tgt_ports, is_connect_scan, is_udp):
     """ Resolves the hostname / target ip """
 
     try:
         # get ip from domain, else throw error msg
-        tgtIP = gethostbyname(str(tgtHost))
+        tgtIP = gethostbyname(str(tgt_host))
     except:
         print("[-] Error: Unknown Host")
         exit(0)
 
     try:
         # print the resolved domain, or the ip if no resolution
-        tgtName = gethostbyaddr(tgtIP)
+        tgt_name = gethostbyaddr(tgtIP)
         print("[+] Hostname IP resolution")
-        print("-------- Scan Result for: " + tgtName[0] + " -----")
+        print("-------- Scan Result for: " + tgt_name[0] + " -----")
     except:
         print("-------- Scan Result for: " + tgtIP + " -----")
     # set default timeout and ICMP ping host
     setdefaulttimeout(1)
-    canPingHost = ping_host(tgtIP)
+    can_ping_host = ping_host(tgtIP)
     # if host is live print response
-    if canPingHost:
+    if can_ping_host:
         print("[+] Host responds to ICMP Ping ")
         pass
     else:
@@ -258,79 +258,79 @@ def resolveHost(tgtHost, tgtPorts, isConnectScan, isUdp):
         pass
 
     # check protocol and run port scan loop
-    if isUdp:
-        for port in tgtPorts:
+    if is_udp:
+        for port in tgt_ports:
             port = int(port)
-            udp_connScan(tgtHost, port, isConnectScan)
+            udp_conn_scan(tgt_host, port, is_connect_scan)
         print("\n[+] Completed UDP Scan.\n")
     # then run the tcp port scan loop
-    for port in tgtPorts:
+    for port in tgt_ports:
         port = int(port)
-        connScan(tgtHost, port, isConnectScan)
+        conn_scan(tgt_host, port, is_connect_scan)
     print("\n[+] Completed TCP Scan.\n")
 
 
-def mgmtModule(ipv4Ipaddress, ipv4HostList, portNumbers, isNetworkScan, isConnectScan, isUdp):
+def mgmt_module(ipv4_ip_address, ipv4_host_list, port_numbers, is_network_scan, is_connect_scan, is_udp):
     """ direct activity and control program using top level args """
 
-    if isNetworkScan:
+    if is_network_scan:
         # network scan, loop through address range
-        random.shuffle(ipv4HostList)
-        for addr in ipv4HostList:
-            resolveHost(addr, portNumbers, isConnectScan, isUdp)
+        random.shuffle(ipv4_host_list)
+        for addr in ipv4_host_list:
+            resolve_host(addr, port_numbers, is_connect_scan, is_udp)
     else:
         # not a network, scan single IP address
-        resolveHost(ipv4Ipaddress, portNumbers, isConnectScan, isUdp)
+        resolve_host(ipv4_ip_address, port_numbers, is_connect_scan, is_udp)
 
 
-def domainCheck(ipv4Ipaddress):
+def domain_check(ipv4_ip_address):
 
     # check for domain name && network scan flag
-    domainCheck = ipv4Ipaddress.split(".")
-    hostName = gethostbyname(str(ipv4Ipaddress))
+    domain_dot_check = ipv4_ip_address.split(".")
+    host_name = gethostbyname(str(ipv4_ip_address))
 
     try:
-        if domainCheck[1] == "com" or "net" or "org" or "io" or "gov" or "edu":
+        if domain_dot_check[1] == "com" or "net" or "org" or "io" or "gov" or "edu":
             # domain passed && network scan flag > get ip > generate network > portscan loop
-            domainIP = gethostbyname(str(ipv4Ipaddress))
-            ipv4Ipaddress = domainIP
+            domain_ip = gethostbyname(str(ipv4_ip_address))
+            ipv4_ip_address = domain_ip
     except IndexError:
-        isHostname = input("[-] Is target address a hostname? y/n ")
-        if isHostname == "y":
-            ipv4Ipaddress = hostName
+        is_hostname = input("[-] Is target address a hostname? y/n ")
+        if is_hostname == "y":
+            ipv4_ip_address = host_name
         else:
             print("[-] ERROR: address cannot be resolved as IP, Domain or Host")
             exit(0)
 
-    return ipv4Ipaddress
+    return ipv4_ip_address
 
 
-def networkOption(ipv4Ipaddress, ipv4HostList):
+def network_option(ipv4_ip_address, ipv4_host_list):
     """check network scan option"""
 
-    ipv4Ipaddress = domainCheck(ipv4Ipaddress)
-    checkHostBit = list(map(int, ipv4Ipaddress.split(".")))
-    if checkHostBit[3] > 0:
+    ipv4_ip_address = domain_check(ipv4_ip_address)
+    check_host_bit = list(map(int, ipv4_ip_address.split(".")))
+    if check_host_bit[3] > 0:
         # reset the host bit
-        checkHostBit[3] = 0
+        check_host_bit[3] = 0
 
     # network flag = true
-    startNetIp = ipaddress.ip_address(
-        str(checkHostBit[0]) + "." + str(checkHostBit[1]) + "." + str(checkHostBit[2]) + "." + str(
-            checkHostBit[3]))
-    endNetIp = ipaddress.ip_address(
-        str(checkHostBit[0]) + "." + str(checkHostBit[1]) + "." + str(checkHostBit[2]) + "." + str(254))
-    print("[+] Network scan engaged, scanning targets from: " + str(startNetIp) + " to " + str(endNetIp))
+    start_net_ip = ipaddress.ip_address(
+        str(check_host_bit[0]) + "." + str(check_host_bit[1]) + "." + str(check_host_bit[2]) + "." + str(
+            check_host_bit[3]))
+    end_net_ip = ipaddress.ip_address(
+        str(check_host_bit[0]) + "." + str(check_host_bit[1]) + "." + str(check_host_bit[2]) + "." + str(254))
+    print("[+] Network scan engaged, scanning targets from: " + str(start_net_ip) + " to " + str(end_net_ip))
 
-    for targetAddress in range(int(startNetIp), int(endNetIp)):
-        ipv4HostList.append(ipaddress.IPv4Address(targetAddress))
-    print(ipv4HostList)
-    return ipv4HostList
+    for targetAddress in range(int(start_net_ip), int(end_net_ip)):
+        ipv4_host_list.append(ipaddress.IPv4Address(targetAddress))
+    print(ipv4_host_list)
+    return ipv4_host_list
 
 
-def portParse(portNumbers):
+def port_parse(port_numbers):
     """parse the port numbers out of input args"""
-    for port in portNumbers:
+    for port in port_numbers:
         try:
             # check for number 22 vs range 22-26
             port_int = int(port)
@@ -338,11 +338,11 @@ def portParse(portNumbers):
         except ValueError:
             port_split = port.split("-")
             port_range = range(int(port_split[0]), int(port_split[1]))
-            portNumbers.remove(port)
+            port_numbers.remove(port)
             for new_port in port_range:
-                portNumbers.append(new_port)
+                port_numbers.append(new_port)
     # return is to handle basic scan calls from serpent.py
-    return portNumbers
+    return port_numbers
 
 
 def parse():
@@ -360,22 +360,22 @@ def parse():
     parser.add_argument("-u", "--udp", action="store_true", help="include UDP scan")
 
     args = parser.parse_args()
-    ipv4HostList = []
+    ipv4_host_list = []
 
     # store the input args
-    isConnectScan = args.connect
-    isUdp = args.udp
-    ipv4Ipaddress = args.address
-    isNetworkScan = args.network
-    portNumbers = args.ports.split(",")
+    is_connect_scan = args.connect
+    is_udp = args.udp
+    ipv4_ip_address = args.address
+    is_network_scan = args.network
+    port_numbers = args.ports.split(",")
 
-    if isNetworkScan:
-        ipv4HostList = networkOption(ipv4Ipaddress, ipv4HostList)
+    if is_network_scan:
+        ipv4_host_list = network_option(ipv4_ip_address, ipv4_host_list)
     else:
-        ipv4HostList.append(ipv4Ipaddress)
+        ipv4_host_list.append(ipv4_ip_address)
     # call the port parse module to handle port numbers
-    parsed_port_numbers = portParse(portNumbers)
-    mgmtModule(ipv4Ipaddress, ipv4HostList, parsed_port_numbers, isNetworkScan, isConnectScan, isUdp)
+    parsed_port_numbers = port_parse(port_numbers)
+    mgmt_module(ipv4_ip_address, ipv4_host_list, parsed_port_numbers, is_network_scan, is_connect_scan, is_udp)
 
 
 def main():

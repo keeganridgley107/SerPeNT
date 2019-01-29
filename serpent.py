@@ -102,14 +102,14 @@ def sub_options(user_option):
         # is_connect_scan = input('Attempt brute force connection to live hosts? y/n\n>')
         try:
             # clean port num input
-            parsed_port_numbers = ip_scan.portParse(port_numbers)
+            parsed_port_numbers = ip_scan.port_parse(port_numbers)
             print(parsed_port_numbers)
         except Exception as e:
             print("[-] Error parsing ports: %s \n[-]Error msg: %s" % (port_numbers, e))
         try:
             # basic single target scan
             # TODO: auto get ip address -> scan LAN -> no address / port input ; select serv
-            ip_scan.resolveHost(address, parsed_port_numbers, isConnectScan=False, isUdp=False)
+            ip_scan.resolve_host(address, parsed_port_numbers, is_connect_scan=False, is_udp=False)
             pass
         except:
             print("[-] Error: Scanner exited... is %s the correct target?" % address)
