@@ -22,6 +22,7 @@ import ip_tools.web_crawl as web_crawl
 
 #################################################################################
 
+# TODO: refactor below to utils_module
 
 def full_path(folder, location='Desktop'):
     """takes in name of folder and location and returns a full path to it"""

@@ -25,7 +25,7 @@ import subprocess  # Execute a shell command
 ##########################################################################################
 
 
-def pingHost(host):
+def ping_host(host):
     """
     Returns True if host (str) responds to a ping request.
     Remember that a host may not respond to a ping (ICMP) request even if the host name is valid.
@@ -37,27 +37,25 @@ def pingHost(host):
     # Building the command. "ping -c 1 google.com" for Unix || "ping -n 1 google.com" for windows
     command = ['ping', param, '1', host]
 
-    # Pinging
     # TODO: change to use check_output to not print pinging; only result
     # hostInfo = subprocess.check_output(['ping', param, '1', host], shell=True).decode("utf-8")
     # replyInfo = hostInfo.split("\n")
     # replyInfo = replyInfo[2]
 
-    isHostLive = subprocess.call(command) == 0
-    return isHostLive
+    return subprocess.call(command) == 0
 
 
-def ftpRecon(host, user, password):
+def ftp_recon(host, user, password):
     """ recon ftp server once password is found """
     try:
         ftp = ftplib.FTP(host)
         ftp.login(user, password)
         welcome = ftp.getwelcome()
-        ftpDir = ftp.dir()
+        ftp_dir = ftp.dir()
         ftp.quit()
         print(" \n-------------------SCAN-REPORT-------------------")
         print("[+] FTP service: " + welcome + "\n")
-        print("[+] Dir: " + ftpDir)
+        print("[+] Dir: " + ftp_dir)
         print(" \n")
     except:
         # error
@@ -97,7 +95,7 @@ def ftpModule(tgtHost):
         print("[+] Password: admin")
         print("-------------------------------------------------")
         print("\n")
-        ftpRecon(targetHostAddress, userName, "admin")
+        ftp_recon(targetHostAddress, userName, "admin")
     else:
         print('[-] FTP default login failed on host')
 
@@ -118,7 +116,7 @@ def ftpModule(tgtHost):
                 print("[+] Password: " + password)
                 print("-------------------SCAN-RESULTS------------------")
                 print("\n")
-                ftpRecon(targetHostAddress, userName, password)
+                ftp_recon(targetHostAddress, userName, password)
                 print("\n")
                 exit(0)
 
@@ -249,7 +247,7 @@ def resolveHost(tgtHost, tgtPorts, isConnectScan, isUdp):
         print("-------- Scan Result for: " + tgtIP + " -----")
     # set default timeout and ICMP ping host
     setdefaulttimeout(1)
-    canPingHost = pingHost(tgtIP)
+    canPingHost = ping_host(tgtIP)
     # if host is live print response
     if canPingHost:
         print("[+] Host responds to ICMP Ping ")
