@@ -7,6 +7,8 @@ Serpent is a simple cross platform :snake: based interactive network toolkit.
 
 I made it to learn python and make some kind of automation tool
 
+UPDATE (Nov/04/19): Going to refactor this to be better organized and fix a few bugs 
+
 #### Features Include:
 
 - IP/Port Scanner
