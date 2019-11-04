@@ -119,3 +119,4 @@ users_dict.txt
 # DEV 
 serpent_venv/
 .DS_Store
+.vscode
