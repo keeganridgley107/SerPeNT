@@ -115,3 +115,7 @@ pass_dict.txt
 users_dict.txt
 .csv
 .DS_Store
+
+# DEV 
+serpent_venv/
+.DS_Store
