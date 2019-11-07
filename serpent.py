@@ -12,12 +12,12 @@ notes: TODO: import mods/ check fs/ valid input/ args pass/ error handling/
 import os
 from platform import system as system_name  # Returns the system/OS name
 import time
-import ip_tools.scanner as scanner
-import ip_tools.tcp_sniff as tcp_sniff
-import ip_tools.bin_sniff as bin_sniff
-import ip_tools.dir_serve3 as dir_serve3
-import ip_tools.v_server as v_server
-import ip_tools.web_crawl as web_crawl
+import serpent.scanner as scanner
+import serpent.tcp_sniff as tcp_sniff
+import serpent.bin_sniff as bin_sniff
+import serpent.dir_serve3 as dir_serve3
+import serpent.v_server as v_server
+import serpent.web_crawl as web_crawl
 
 
 #################################################################################

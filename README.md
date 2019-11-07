@@ -5,15 +5,13 @@
 
 Serpent is a simple cross platform :snake: based interactive network toolkit.
 
-I made it to learn python and make some kind of automation tool
-
-UPDATE (Nov/04/19): Going to refactor this to be better organized and fix a few bugs 
+its essentially a few smaller tools wrapped up in a interactive cli that uses argparse to deal with params
 
 #### Features Include:
 
 - IP/Port Scanner
 - Vulnerability Scanner
-- Packet Sniffer
+- Packet Sniffer - might not work on some machines
 - Web Scraper
 - Static File Server
 
@@ -26,6 +24,9 @@ to install Serpent open a terminal and run the following command:
 ``` 
 git clone https://github.com/keeganridgley107/serpent.git 
 cd serpent
+python3 -m venv serpent_venv
+source serpent_venv/bin/activate
+pip3 install -r requirements.txt
 ```
 
 ## Usage
