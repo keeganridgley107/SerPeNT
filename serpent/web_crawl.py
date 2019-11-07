@@ -1,22 +1,30 @@
 """simple web crawler and scraper"""
 
 from bs4 import BeautifulSoup
-import urllib.request
+import requests
+#import urllib.request
 import csv
 from datetime import datetime
 
 
 def get_site():
     website = input("[+] Enter a website to scrape:\n>")
-    resp = urllib.request.urlopen(website)
-    soup = BeautifulSoup(resp, from_encoding=resp.info().get_param('charset'))
-    
+    website = "http://{}".format(website)
+    input("[?] Is {} the correct target?".format(website))
+
+    r  = requests.get(website)
+    data = r.text
+    soup = BeautifulSoup(data)
+
+    for link in soup.find_all('a'):
+        print(link.get('href'))
+
     for link in soup.find_all('a', href=True):
-        # print(link['href'], " <=LINK | TEXT=> ", link.text)
-        with open('index.csv', 'w') as csv_file:
-            writer = csv.writer(csv_file)
-            writer.writerow([link['href'], link.text, datetime.now()])
-            print('[+] adding link...')
+        print(link['href'], " <=LINK | TEXT=> ", link.text)
+        # with open('index.csv', 'w') as csv_file:
+        #    writer = csv.writer(csv_file)
+        #    writer.writerow([link['href'], link.text, datetime.now()])
+        #    print('[+] adding link...')
 
 
 def main():

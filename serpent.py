@@ -76,7 +76,7 @@ def main_options():
         if int(user_option) < 5:
             sub_options(int(user_option))
         else:
-            print('Exiting IpTools...')
+            print('Exiting Serpent...')
             exit(0)
     except ValueError:
         main_options()
@@ -141,7 +141,7 @@ def sub_options(user_option):
             time.sleep(1)
             py_rat_server = v_server
             try:
-                # run iptools module
+                # run serpent module
                 port_number = int(input('Enter a port for server to listen on\n>'))
                 print("[+] Starting Python Reverse Shell Listener on port %s..." % port_number)
                 py_rat_server.main(port_number)
@@ -158,7 +158,7 @@ def sub_options(user_option):
             time.sleep(1)
             folder_server = dir_serve3
             try:
-                # run iptools module
+                # run serpent module
                 # dir_port = int(input("Please enter a port number to serve folder on\n>"))
                 user_option = input('Press enter to begin serving contents of /home\n>')
                 # print("[+] Starting Python Folder Server on port %s..." % dir_port)
@@ -206,7 +206,7 @@ def sub_options(user_option):
             press_key = input('Press Enter to begin Binary Sniffer...\n>')
             try:
                 sniff.start_sniffing()
-                # run iptools module
+                # run serpent module
             except (KeyboardInterrupt, OSError):
                 print("[-] Error: Ending Binary Sniffer...")
                 time.sleep(1)
@@ -236,10 +236,10 @@ def sub_options(user_option):
             # create instance of iptool in local scope
             link_scraper = web_crawl
             try:
-                # run iptools module
+                # run serpent module
                 link_scraper.get_site()
                 ban("WIN")
-                print("[+] Links added to /ip_tools/index.csv file")
+                print("[+] Links added to /serpent/index.csv file")
                 time.sleep(0.2)
                 print("[+] Returning to main menu...")
                 time.sleep(1)
