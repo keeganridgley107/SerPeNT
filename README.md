@@ -55,7 +55,7 @@ Select an option to continue...
 ## Serpent Tools 
 
 All of the tools in Serpent can be accessed individually. 
-This allows advanced users to use features not yet included in serpent.py 
+This allows advanced users to use features not available in interactive mode. 
 
 ----
 
@@ -83,11 +83,15 @@ optional arguments:
 
 ###### Scan localhost for http web server 
 
-```python3 serpent/scanner.py localhost -p 80```
+```
+python3 serpent/scanner.py localhost -p 80
+```
 
 ###### Scan localhost for ftp service and connect if found
 
-```python3 serpent/scanner.py localhost -c -p20```
+```
+python3 serpent/scanner.py localhost -c -p20
+```
 
 -----------
 
