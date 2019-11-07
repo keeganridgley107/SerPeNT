@@ -19,7 +19,7 @@ its essentially a few smaller tools wrapped up in a interactive cli that uses ar
 
 ## Install
 
-to install Serpent open a terminal and run the following command:
+to install Serpent open a terminal and run the following commands:
 
 ``` 
 git clone https://github.com/keeganridgley107/serpent.git 
@@ -33,7 +33,7 @@ pip3 install -r requirements.txt
 
 To use serpent the following command in a terminal:
 
-```python serpent.py```
+```python3 serpent.py```
  
 then select the tool you want to use from the options menu
 
@@ -83,11 +83,11 @@ optional arguments:
 
 ###### Scan localhost for http web server 
 
-```python scanner.py localhost -p 80```
+```python3 serpent/scanner.py localhost -p 80```
 
 ###### Scan localhost for ftp service and connect if found
 
-```python ipTools.py localhost -c -p20```
+```python3 serpent/scanner.py localhost -c -p20```
 
 -----------
 
