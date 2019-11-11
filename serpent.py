@@ -4,7 +4,7 @@ SerPeNT: Simple Python Network Toolkit
 
 usage: python serpent.py
 
-notes: TODO: import mods/ check fs/ valid input/ args pass/ error handling/
+notes: TODO: refactor fs/ validate inputs, cross platform errors handled
 
 """
 
