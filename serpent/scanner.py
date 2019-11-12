@@ -222,7 +222,26 @@ def printBanner(connSock, tgtPort, tgtHost, isConnectScan):
             print('[-] Banner not available!')
 
 
-def connScan(tgtHost, tgtPort):
+def connScan(tgtHost, tgtPort, isConnectScan):
+    """module connects to ports and prints response msg"""
+    try:
+        # create the socket object
+        connSock = socket(AF_INET, SOCK_STREAM)
+        # try to connect with the target
+        connSock.connect((tgtHost, tgtPort))
+        print("[+] tcp port {} open".format(str(tgtPort)))
+        # printBanner(connSock, tgtPort, tgtHost, isConnectScan)
+    except:
+        # print failure results
+        print("[-] tcp port {} closed".format(str(tgtPort)), end="\r", flush=True)
+        # print("", end="\r", flush=True)
+        pass
+    finally:
+        # close the socket object
+        connSock.close()
+
+
+def connScan_new(tgtHost, tgtPort):
     """
     module connects to ports and prints response msg
 
@@ -328,19 +347,26 @@ def resolveHost(tgtHost, tgtPorts, isConnectScan, isUdp):
         print("\n[+] Completed UDP Scan.\n")
     
     print("\n[+] Starting TCP Scan...\n")
+    
     # then run the tcp port scan loop
     for port in tgtPorts:
         port = int(port)
-        connScan(tgtHost, port)
-        results = connScan(tgtHost, port)
-        print(results)
-        sleep(.06)
-        # if open print; if closed print then flush stdout
-        if results["open"] == True:
-            print(results["msg"])
-        else:
-            print("\r" + results["msg"], end="")
+        connScan(tgtHost, port, isConnectScan)
     print("\n[+] Completed TCP Scan.\n")
+
+    ## then run the tcp port scan loop
+    #for port in tgtPorts:
+    #    port = int(port)
+    #    connScan(tgtHost, port)
+    #    results = connScan(tgtHost, port)
+    #    print(results)
+    #    sleep(.06)
+    #    # if open print; if closed print then flush stdout
+    #    if results["open"] == True:
+    #        print(results["msg"])
+    #    else:
+    #        print("\r" + results["msg"], end="")
+    #print("\n[+] Completed TCP Scan.\n")
 
 
 def mgmtModule(ipv4Ipaddress, ipv4HostList, portNumbers, isNetworkScan, isConnectScan, isUdp):
