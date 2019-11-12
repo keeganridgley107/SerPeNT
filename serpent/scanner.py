@@ -239,21 +239,19 @@ def connScan(tgtHost, tgtPort):
         connSock = socket(AF_INET, SOCK_STREAM)
         # try to connect with host
         connSock.connect(tgtHost, tgtPort)
-        input("got fire here")
         response = {
             "open": True,
             "msg": "[+] TCP port {} open".format(str(tgtPort))
             }
+        connSock.close()
         return response
     except:
         response = {
         "open": False,
         "msg": "[-] TCP port {} closed".format(str(tgtPort))
         }
-        return response
-    finally:
-        # close the socket object
         connSock.close()
+        return response
 
 def udp_connScan(tgtHost, port):
     """"
@@ -327,7 +325,6 @@ def resolveHost(tgtHost, tgtPorts, isConnectScan, isUdp):
                 print(results["msg"])
             else:
                 print("\r" + results["msg"], end="")
-
         print("\n[+] Completed UDP Scan.\n")
     
     print("\n[+] Starting TCP Scan...\n")
@@ -336,6 +333,7 @@ def resolveHost(tgtHost, tgtPorts, isConnectScan, isUdp):
         port = int(port)
         connScan(tgtHost, port)
         results = connScan(tgtHost, port)
+        print(results)
         sleep(.06)
         # if open print; if closed print then flush stdout
         if results["open"] == True:
