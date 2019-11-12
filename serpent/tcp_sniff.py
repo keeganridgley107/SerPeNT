@@ -7,6 +7,8 @@ Usage: tcp_sniff.py
 
 Notes: currently only sniffs localhost traffic
 
+Credits: https://www.pluralsight.com/authors/gus-khawaja :: Penetration Testing Automation Using Python and Kali Linux
+
 """
 
 import socket

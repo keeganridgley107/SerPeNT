@@ -17,7 +17,7 @@ from platform import system as system_name  # Returns the system/OS name
 import subprocess  # Execute a shell command
 
 ###########################
-# Main TODO: refactor / + multi-threading / + arg[report_closed]
+# Main TODO: refactor 
 ###########################
 
 ##########################################################################################
@@ -286,8 +286,13 @@ def mgmtModule(ipv4Ipaddress, ipv4HostList, portNumbers, isNetworkScan, isConnec
 
 
 def domainCheck(ipv4Ipaddress):
+    """
+    Attempt to resolve hostname if domain is target
+    
+    Input: target param (string)
 
-    # check for domain name && network scan flag
+    Returns: Target address (string) 
+    """
     domainCheck = ipv4Ipaddress.split(".")
     hostName = gethostbyname(str(ipv4Ipaddress))
 
@@ -308,7 +313,13 @@ def domainCheck(ipv4Ipaddress):
 
 
 def networkOption(ipv4Ipaddress, ipv4HostList):
-    """check network scan option"""
+    """
+    Top level param equals a target range of X.X.X.1-254
+
+    Inputs: target ip address (string), ip address list (list)
+    
+    Returns: ip address list (list)
+    """
 
     ipv4Ipaddress = domainCheck(ipv4Ipaddress)
     checkHostBit = list(map(int, ipv4Ipaddress.split(".")))
@@ -331,7 +342,13 @@ def networkOption(ipv4Ipaddress, ipv4HostList):
 
 
 def portParse(portNumbers):
-    """parse the port numbers out of input args"""
+    """
+    Parse port ranges into single array
+
+    Input: array of ports : [80, 8000-8888]
+
+    Returns: array of ports : [80,8000,8001,8002,...]
+    """
     for port in portNumbers:
         try:
             # check for number 22 vs range 22-26
@@ -348,7 +365,9 @@ def portParse(portNumbers):
 
 
 def parse():
-    """parse any arguments passed into the cmd line"""
+    """
+    parse top level arguments 
+    """
 
     parser = argparse.ArgumentParser(prog='scanner.py',
                                      description='''Simple Wireless Network Utility''',
@@ -375,6 +394,7 @@ def parse():
         ipv4HostList = networkOption(ipv4Ipaddress, ipv4HostList)
     else:
         ipv4HostList.append(ipv4Ipaddress)
+
     # call the port parse module to handle port numbers
     parsed_port_numbers = portParse(portNumbers)
     mgmtModule(ipv4Ipaddress, ipv4HostList, parsed_port_numbers, isNetworkScan, isConnectScan, isUdp)
