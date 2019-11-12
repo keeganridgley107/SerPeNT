@@ -337,7 +337,7 @@ def networkOption(ipv4Ipaddress, ipv4HostList):
 
     for targetAddress in range(int(startNetIp), int(endNetIp)):
         ipv4HostList.append(ipaddress.IPv4Address(targetAddress))
-    print(ipv4HostList)
+    
     return ipv4HostList
 
 
