@@ -15,10 +15,7 @@ import ftplib
 import random
 from platform import system as system_name  # Returns the system/OS name
 import subprocess  # Execute a shell command
-
-###########################
-# Main TODO: refactor 
-###########################
+from time import sleep
 
 ##########################################################################################
 # CURRENT MODULES : network scan / port scan / ftp password brute-force
@@ -27,8 +24,13 @@ import subprocess  # Execute a shell command
 
 def pingHost(host):
     """
-    Returns True if host (str) responds to a ping request.
-    Remember that a host may not respond to a ping (ICMP) request even if the host name is valid.
+    Takes host address and returns True if host (str) responds to a ping request.
+
+    Args: host address (string)
+
+    Returns: Bool
+
+    Note: Host may not respond to a ping (ICMP) request even if the hostname is valid.
     """
 
     # Ping command count option as function of OS
@@ -44,6 +46,7 @@ def pingHost(host):
     # replyInfo = replyInfo[2]
 
     isHostLive = subprocess.call(command) == 0
+    print("\n", flush=True)  # flush is kinda hacky workaround for above fix
     return isHostLive
 
 
@@ -83,7 +86,8 @@ def ftpModule(tgtHost):
     # get input for user name / list.txt
     userName = input('Enter FTP UserName: ')
 
-    passwordsFilePath = "../Lists/" + input('Enter name of password list file: ')
+    passwordsFilePath = "../Lists/" + \
+        input('Enter name of password list file: ')
 
     # TODO: refactor to remove default / handle clean file error
 
@@ -135,8 +139,20 @@ def ftpModule(tgtHost):
 
 
 def ipRange(start_ip, end_ip):
-    """enumerates ip addresses from a range"""
-    # currently creates a full LAN scan from any ip passed in
+    """
+    enumerates target ip addresses from a range
+
+    Args:
+
+        start ip address (string)
+        end ip address (string)
+
+    Returns: list of all ip addresses in range (list)
+    """
+
+    # TODO: fix this and add arg parse for target range
+    # i.e x.x.x.100-254
+
     print(" [+] starting ip range...\n", start_ip, end_ip, "\n")
     start = list(map(int, start_ip.split(".")))
     # 12.13.14.15 => [12,13,14,15]
@@ -160,12 +176,21 @@ def ipRange(start_ip, end_ip):
 
 
 def printBanner(connSock, tgtPort, tgtHost, isConnectScan):
-    """module that prints banner info from port if open"""
+    """
+    module that prints banner info from port if open
+
+    Args:
+
+    Returns: 
+
+    """
+
+    # Note: Needs refactor => mv ftp to new function
+
     print(connSock, tgtPort, tgtHost, isConnectScan)
     if isConnectScan:
+        # try to brute force FTP connection
         try:
-            # send data to the target, if port 80 then send GET HTTP
-
             if tgtPort == 80:
                 connSock.send("GET HTTP/1.1 \r\n")
             elif tgtPort == 21:
@@ -197,41 +222,74 @@ def printBanner(connSock, tgtPort, tgtHost, isConnectScan):
             print('[-] Banner not available!')
 
 
-def connScan(tgtHost, tgtPort, isConnectScan):
-    """module connects to ports and prints response msg"""
+def connScan(tgtHost, tgtPort):
+    """
+    module connects to ports and prints response msg
+
+    Args: 
+        target ip (string)
+        target port (string)
+        is connect scan (string)
+
+    Returns: obj (dict)
+    """
+
     try:
-        # create the socket object
+        # create socket with AF_INET (ipv4) & stream TCP
         connSock = socket(AF_INET, SOCK_STREAM)
-        # try to connect with the target
-        connSock.connect((tgtHost, tgtPort))
-        print('[+] tcp port %d open' % tgtPort)
-        printBanner(connSock, tgtPort, tgtHost, isConnectScan)
+        # try to connect with host
+        connSock.connect(tgtHost, tgtPort)
+        input("got fire here")
+        response = {
+            "open": True,
+            "msg": "[+] TCP port {} open".format(str(tgtPort))
+            }
+        return response
     except:
-        # print failure results
-        # print('[-] tcp port %d closed' % tgtPort)
-        pass
+        response = {
+        "open": False,
+        "msg": "[-] TCP port {} closed".format(str(tgtPort))
+        }
+        return response
     finally:
         # close the socket object
         connSock.close()
 
+def udp_connScan(tgtHost, port):
+    """"
+    connection scanner that uses UDP not TCP
 
-def udp_connScan(tgtHost, port, isConnectScan):
-    """"connection scanner that uses UDP not TCP"""
+    Args: 
+        target host (string)
+        target port (int)
+
+    Returns: obj (dict)
+    """
     try:
         # create socket with AF_INET (ipv4) & Datagram (UDP)
         connSock = socket(AF_INET, SOCK_DGRAM)
         # try to connect with host
         connSock.connect(tgtHost, port)
-        print("[+] UDP port %d open" % port)
-        printBanner(connSock, port, tgtHost, isConnectScan)
+        response = {
+            "open": True,
+            "msg": "[+] UDP port {} open".format(str(port))
+            }
+        return response
+        # printBanner(connSock, port, tgtHost)
     except:
-        # TODO: print fail msg if print_closed arg == True
-        # print('[-] UDP port %d closed' % port)
-        pass
+        response = {"open": False,
+        "msg": "[-] UDP port {} closed".format(str(port))
+        }
+        return response
 
 
 def resolveHost(tgtHost, tgtPorts, isConnectScan, isUdp):
-    """ Resolves the hostname / target ip """
+    """
+    Resolves the hostname / target ip 
+    """
+
+    print("\n[+] Starting Hostname IP resolution...\n")
+    sleep(1)
 
     try:
         # get ip from domain, else throw error msg
@@ -243,37 +301,58 @@ def resolveHost(tgtHost, tgtPorts, isConnectScan, isUdp):
     try:
         # print the resolved domain, or the ip if no resolution
         tgtName = gethostbyaddr(tgtIP)
-        print("[+] Hostname IP resolution")
-        print("-------- Scan Result for: " + tgtName[0] + " -----")
+        print("-------- Scanning : " + tgtName[0] + " -----\n")
     except:
-        print("-------- Scan Result for: " + tgtIP + " -----")
+        print("-------- Scanning : " + tgtIP + " -----\n")
+
     # set default timeout and ICMP ping host
     setdefaulttimeout(1)
     canPingHost = pingHost(tgtIP)
     # if host is live print response
     if canPingHost:
-        print("[+] Host responds to ICMP Ping ")
-        pass
+        print("[+] Host responds to ICMP Ping")
     else:
-        # print("[-] No ICMP Ping response ")
-        # TODO: add a arg for show / hide closed hosts & ports
-        pass
+        print("[-] No ICMP Ping response ")
 
     # check protocol and run port scan loop
     if isUdp:
+        print("\n[+] Starting UDP Scan...\n")
         for port in tgtPorts:
             port = int(port)
-            udp_connScan(tgtHost, port, isConnectScan)
+            results = udp_connScan(tgtHost, port)
+            sleep(.06)
+            # if open print; if closed print then flush stdout
+            if results["open"] == True:
+                input("fire")
+                print(results["msg"])
+            else:
+                print("\r" + results["msg"], end="")
+
         print("\n[+] Completed UDP Scan.\n")
+    
+    print("\n[+] Starting TCP Scan...\n")
     # then run the tcp port scan loop
     for port in tgtPorts:
         port = int(port)
-        connScan(tgtHost, port, isConnectScan)
+        connScan(tgtHost, port)
+        results = connScan(tgtHost, port)
+        sleep(.06)
+        # if open print; if closed print then flush stdout
+        if results["open"] == True:
+            print(results["msg"])
+        else:
+            print("\r" + results["msg"], end="")
     print("\n[+] Completed TCP Scan.\n")
 
 
 def mgmtModule(ipv4Ipaddress, ipv4HostList, portNumbers, isNetworkScan, isConnectScan, isUdp):
-    """ direct activity and control program using top level args """
+    """
+    direct activity and control program using top level args 
+    """
+
+    # debug
+    # print(portNumbers)
+    # exit(0)
 
     if isNetworkScan:
         # network scan, loop through address range
@@ -288,7 +367,7 @@ def mgmtModule(ipv4Ipaddress, ipv4HostList, portNumbers, isNetworkScan, isConnec
 def domainCheck(ipv4Ipaddress):
     """
     Attempt to resolve hostname if domain is target
-    
+
     Input: target param (string)
 
     Returns: Target address (string) 
@@ -317,10 +396,10 @@ def networkOption(ipv4Ipaddress, ipv4HostList):
     Top level param equals a target range of X.X.X.1-254
 
     Inputs: target ip address (string), ip address list (list)
-    
+
     Returns: ip address list (list)
     """
-    original_param = ipv4Ipaddress 
+    original_param = ipv4Ipaddress
     ipv4Ipaddress = domainCheck(ipv4Ipaddress)
     checkHostBit = list(map(int, ipv4Ipaddress.split(".")))
     # Reset last bit of ip addr
@@ -333,15 +412,16 @@ def networkOption(ipv4Ipaddress, ipv4HostList):
             checkHostBit[3]))
     endNetIp = ipaddress.ip_address(
         str(checkHostBit[0]) + "." + str(checkHostBit[1]) + "." + str(checkHostBit[2]) + "." + str(254))
-    print("[+] Network scan engaged, scanning targets from: " + str(startNetIp) + " to " + str(endNetIp))
-    
+    print("[+] Network scan engaged, scanning targets from: " +
+          str(startNetIp) + " to " + str(endNetIp))
+
     net_check = input("[?] Network scans are very slow. Proceed anyway? y/n\n")
     if net_check == "y":
         pass
     else:
         input("Press any key to exit...")
         exit(0)
-    
+
     for targetAddress in range(int(startNetIp), int(endNetIp)):
         ipv4HostList.append(ipaddress.IPv4Address(targetAddress))
     return ipv4HostList
@@ -380,11 +460,16 @@ def parse():
                                      epilog='''Created by K''',
                                      usage='%(prog)s [-h] address [-p] [port-port,port,+] [-n] [-c]'
                                      )
-    parser.add_argument("address", type=str, help="Target Address : 8.8.8.8 or google.com")
-    parser.add_argument("-p", "--ports", type=str, default="20-25,80,443,8000,8080", help="Ports to scan : 20-25,80")
-    parser.add_argument("-n", "--network", action="store_true", help="Scan network : X.X.X.1-254")
-    parser.add_argument("-c", "--connect", action="store_true", help="Connect to discovered hosts")
-    parser.add_argument("-u", "--udp", action="store_true", help="include UDP scan")
+    parser.add_argument("address", type=str,
+                        help="Target Address : 8.8.8.8 or google.com")
+    parser.add_argument("-p", "--ports", type=str,
+                        default="20-25,80,443,8000,8080", help="Ports to scan : 20-25,80")
+    parser.add_argument("-n", "--network", action="store_true",
+                        help="Scan network : X.X.X.1-254")
+    parser.add_argument("-c", "--connect", action="store_true",
+                        help="Connect to discovered hosts")
+    parser.add_argument("-u", "--udp", action="store_true",
+                        help="include UDP scan")
 
     args = parser.parse_args()
     ipv4HostList = []
@@ -403,7 +488,8 @@ def parse():
 
     # call the port parse module to handle port numbers
     parsed_port_numbers = portParse(portNumbers)
-    mgmtModule(ipv4Ipaddress, ipv4HostList, parsed_port_numbers, isNetworkScan, isConnectScan, isUdp)
+    mgmtModule(ipv4Ipaddress, ipv4HostList, parsed_port_numbers,
+               isNetworkScan, isConnectScan, isUdp)
 
 
 def main():
