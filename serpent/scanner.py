@@ -320,24 +320,30 @@ def networkOption(ipv4Ipaddress, ipv4HostList):
     
     Returns: ip address list (list)
     """
-
+    original_param = ipv4Ipaddress 
     ipv4Ipaddress = domainCheck(ipv4Ipaddress)
     checkHostBit = list(map(int, ipv4Ipaddress.split(".")))
+    # Reset last bit of ip addr
+    # 127.0.0.34 ==> 127.0.0.1
     if checkHostBit[3] > 0:
-        # reset the host bit
-        checkHostBit[3] = 0
+        checkHostBit[3] = 1
 
-    # network flag = true
     startNetIp = ipaddress.ip_address(
         str(checkHostBit[0]) + "." + str(checkHostBit[1]) + "." + str(checkHostBit[2]) + "." + str(
             checkHostBit[3]))
     endNetIp = ipaddress.ip_address(
         str(checkHostBit[0]) + "." + str(checkHostBit[1]) + "." + str(checkHostBit[2]) + "." + str(254))
     print("[+] Network scan engaged, scanning targets from: " + str(startNetIp) + " to " + str(endNetIp))
-
+    
+    net_check = input("[?] Network scans are very slow. Proceed anyway? y/n\n")
+    if net_check == "y":
+        pass
+    else:
+        input("Press any key to exit...")
+        exit(0)
+    
     for targetAddress in range(int(startNetIp), int(endNetIp)):
         ipv4HostList.append(ipaddress.IPv4Address(targetAddress))
-    
     return ipv4HostList
 
 
