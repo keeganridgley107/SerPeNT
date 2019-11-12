@@ -241,37 +241,6 @@ def connScan(tgtHost, tgtPort, isConnectScan):
         connSock.close()
 
 
-def connScan_new(tgtHost, tgtPort):
-    """
-    module connects to ports and prints response msg
-
-    Args: 
-        target ip (string)
-        target port (string)
-        is connect scan (string)
-
-    Returns: obj (dict)
-    """
-
-    try:
-        # create socket with AF_INET (ipv4) & stream TCP
-        connSock = socket(AF_INET, SOCK_STREAM)
-        # try to connect with host
-        connSock.connect(tgtHost, tgtPort)
-        response = {
-            "open": True,
-            "msg": "[+] TCP port {} open".format(str(tgtPort))
-            }
-        connSock.close()
-        return response
-    except:
-        response = {
-        "open": False,
-        "msg": "[-] TCP port {} closed".format(str(tgtPort))
-        }
-        connSock.close()
-        return response
-
 def udp_connScan(tgtHost, port):
     """"
     connection scanner that uses UDP not TCP
@@ -347,37 +316,18 @@ def resolveHost(tgtHost, tgtPorts, isConnectScan, isUdp):
         print("\n[+] Completed UDP Scan.\n")
     
     print("\n[+] Starting TCP Scan...\n")
-    
     # then run the tcp port scan loop
     for port in tgtPorts:
         port = int(port)
         connScan(tgtHost, port, isConnectScan)
     print("\n[+] Completed TCP Scan.\n")
 
-    ## then run the tcp port scan loop
-    #for port in tgtPorts:
-    #    port = int(port)
-    #    connScan(tgtHost, port)
-    #    results = connScan(tgtHost, port)
-    #    print(results)
-    #    sleep(.06)
-    #    # if open print; if closed print then flush stdout
-    #    if results["open"] == True:
-    #        print(results["msg"])
-    #    else:
-    #        print("\r" + results["msg"], end="")
-    #print("\n[+] Completed TCP Scan.\n")
-
 
 def mgmtModule(ipv4Ipaddress, ipv4HostList, portNumbers, isNetworkScan, isConnectScan, isUdp):
     """
     direct activity and control program using top level args 
     """
-
-    # debug
-    # print(portNumbers)
-    # exit(0)
-
+    
     if isNetworkScan:
         # network scan, loop through address range
         random.shuffle(ipv4HostList)
