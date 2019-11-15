@@ -92,46 +92,7 @@ def sub_options(user_option):
         server_options()
     # SERVER sub options
     elif user_option == 3:
-        # SNIFFERS sub options here
-        ban('Sniffers', '#')
-        print(
-            """
-            [1] Binary Traffic Sniffer
-            [2] TCP/ICMP/UDP Traffic Sniffer
-            [3] Back
-            """)
-        user_option = input('Select an option to continue...\n>')
-        user_option = int(user_option)
-        # convert int from str
-        if user_option == 3:
-            # user selected back
-            main_options()
-        elif user_option == 2:
-            # TCP SNIFFER OPTIONS
-            ban("Traffic Sniffer")
-            sniff = tcp_sniff
-            press_key = input('Press Enter to begin Traffic Sniffer...\n>')
-            try:
-                sniff.start_sniffing()
-            except (KeyboardInterrupt, OSError):
-                print("[-] Error: Ending Traffic Sniffer...")
-                time.sleep(1)
-            # TCP SNIFFER OPTIONS
-            main_options()
-        elif user_option == 1:
-            # BINARY SNIFFER OPTIONS
-            ban("Binary Sniffer")
-            time.sleep(1)
-            sniff = bin_sniff
-            press_key = input('Press Enter to begin Binary Sniffer...\n>')
-            try:
-                sniff.start_sniffing()
-                # run serpent module
-            except (KeyboardInterrupt, OSError):
-                print("[-] Error: Ending Binary Sniffer...")
-                time.sleep(1)
-            # BINARY SNIFFER OPTIONS
-            main_options()
+        sniffer_options()
     # SNIFFERS sub options
     elif user_option == 4:
         # Scrapers sub options here
@@ -289,6 +250,7 @@ def server_options():
         # unknown input; call func again 
         server_options()
 
+
 def sniffer_options():
     """
     takes user input to build cmd for sniffer module
@@ -337,6 +299,8 @@ def sniffer_options():
             time.sleep(1)
         # BINARY SNIFFER OPTIONS
         main_options()
+
+
 #################################################################################
 
 
