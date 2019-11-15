@@ -60,9 +60,12 @@ def cls():
 
 
 def main_options():
-    """main level menu for user selection"""
+    """
+    top level menu for module selection
+    """
 
     ban('Options', '#')
+
     print(
         """
         [1] Scanner
@@ -83,7 +86,9 @@ def main_options():
 
 
 def sub_options(user_option):
-    """handle the main options and pass args to modules"""
+    """
+    run options method for selected module 
+    """
 
     if user_option == 1:
         scanner_options()     
@@ -95,47 +100,7 @@ def sub_options(user_option):
         sniffer_options()
     # SNIFFERS sub options
     elif user_option == 4:
-        # Scrapers sub options here
-
-        ban('Scrapers', '#', lines=1)
-        # list server modules
-        print(
-            """
-            [1] HTML links -> CSV
-            [2] Back
-            """)
-        user_option = input('Select an option to continue...\n>')
-        user_option = int(user_option)
-        # convert int from str
-        if user_option == 2:
-            # user selected back
-            main_options()
-        elif user_option == 1:
-            # SCRAPER SUB OPTIONS
-            ban('HTML Link Scraper')
-            time.sleep(1)
-            # create instance of iptool in local scope
-            link_scraper = web_crawl
-            try:
-                # run serpent module
-                link_scraper.get_site()
-                ban("WIN")
-                print("[+] Links added to /serpent/index.csv file")
-                time.sleep(0.2)
-                print("[+] Returning to main menu...")
-                time.sleep(1)
-                cls()
-            except Exception as e:
-                print("[-] Error: Ending HTML Link Scraper...")
-                # handle errors from run module and end socket connection if needed
-                print("[-] Error Message: %s " % e)
-                time.sleep(1)
-                # no need to kill menu.py, return to main to try again or exit gracefully
-                main_options()
-            # SCRAPER SUB OPTIONS
-            main_options()
-
-        # end HTML_scraper sub options
+        scraper_options()
     # SCRAPER sub options
     else:
         ban('Invalid Option', '!')
@@ -301,6 +266,54 @@ def sniffer_options():
         main_options()
 
 
+def scraper_options():
+    """
+    takes user input to build cmd for sniffer module
+    
+    Args:
+
+    Returns: 
+    """
+
+    ban('Scrapers', '#', lines=1)
+    # list server modules
+    print(
+        """
+        [1] HTML links -> CSV
+        [2] Back
+        """)
+    user_option = input('Select an option to continue...\n>')
+    user_option = int(user_option)
+    # convert int from str
+    if user_option == 2:
+        # user selected back
+        main_options()
+    elif user_option == 1:
+        # SCRAPER SUB OPTIONS
+        ban('HTML Link Scraper')
+        time.sleep(1)
+        # create instance of iptool in local scope
+        link_scraper = web_crawl
+        try:
+            # run serpent module
+            link_scraper.get_site()
+            ban("WIN")
+            print("[+] Links added to /serpent/index.csv file")
+            time.sleep(0.2)
+            print("[+] Returning to main menu...")
+            time.sleep(1)
+            cls()
+        except Exception as e:
+            print("[-] Error: Ending HTML Link Scraper...")
+            # handle errors from run module and end socket connection if needed
+            print("[-] Error Message: %s " % e)
+            time.sleep(1)
+            # no need to kill menu.py, return to main to try again or exit gracefully
+            main_options()
+        # SCRAPER SUB OPTIONS
+        main_options()
+
+        # end HTML_scraper sub options
 #################################################################################
 
 
