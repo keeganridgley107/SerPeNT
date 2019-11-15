@@ -86,62 +86,10 @@ def sub_options(user_option):
     """handle the main options and pass args to modules"""
 
     if user_option == 1:
-        # SCANNER sub options here
-        scanner_options()
-        
+        scanner_options()     
     # SCANNER sub options
     elif user_option == 2:
-        # SERVERS sub options here
-
-        ban('Servers', '#', lines=1)
-        # list server modules
-        print(
-            """
-            [1] LAN File Sharing Server
-            [2] Reverse Shell Server (PyRat Listener)
-            [3] Back
-            """)
-        user_option = input('Select an option to continue...\n>')
-        user_option = int(user_option)
-        # convert int from str
-        if user_option == 3:
-            # user selected back
-            main_options()
-        elif user_option == 2:
-            # REVERSE SHELL SERVER OPTIONS
-            ban('Reverse Shell Server')
-            time.sleep(1)
-            py_rat_server = v_server
-            try:
-                # run serpent module
-                port_number = int(input('Enter a port for server to listen on\n>'))
-                print("[+] Starting Python Reverse Shell Listener on port %s..." % port_number)
-                py_rat_server.main(port_number)
-            except Exception as e:
-                print("[-] Error: Ending Reverse Shell Listener...")
-                # handle errors from run module and end socket connection if needed
-                time.sleep(1)
-                exit(0)
-            # REVERSE SHELL SERVER OPTIONS
-            main_options()
-        elif user_option == 1:
-            # LAN FILE SHARING SERVER
-            ban('File Sharing Server')
-            time.sleep(1)
-            folder_server = dir_serve3
-            try:
-                # run serpent module
-                # dir_port = int(input("Please enter a port number to serve folder on\n>"))
-                user_option = input('Press enter to begin serving contents of /home\n>')
-                # print("[+] Starting Python Folder Server on port %s..." % dir_port)
-                folder_server.run()
-            except Exception as e:
-                print("[-] Error: Ending Folder Server...")
-                # handle errors from run module and end socket connection if needed
-                time.sleep(1)
-                main_options()
-            # LAN FILE SHARING SERVER
-            main_options()
+        server_options()
     # SERVER sub options
     elif user_option == 3:
         # SNIFFERS sub options here
@@ -247,7 +195,6 @@ def scanner_options():
 
     Returns: 
     """
-    # SCANNER sub options here
 
     ban('Scanner', '#')
     # show banner and load scanner module
@@ -280,6 +227,67 @@ def scanner_options():
     main_options()
 
 
+def server_options():
+    """
+    takes user input to build cmd for scanner module
+    
+    Args:
+
+    Returns: 
+    """
+
+    ban('Servers', '#', lines=1)
+    # list server modules
+    print(
+        """
+        [1] LAN File Sharing Server
+        [2] Reverse Shell Server (PyRat Listener)
+        [3] Back
+        """)
+    user_option = input('Select an option to continue...\n>')
+    user_option = int(user_option)
+    # convert int from str
+    if user_option == 3:
+        # user selected back
+        main_options()
+    elif user_option == 2:
+        # REVERSE SHELL SERVER OPTIONS
+        ban('Reverse Shell Server')
+        time.sleep(1)
+        py_rat_server = v_server
+        try:
+            # run serpent module
+            port_number = int(input('Enter a port for server to listen on\n>'))
+            print("[+] Starting Python Reverse Shell Listener on port %s..." % port_number)
+            py_rat_server.main(port_number)
+        except Exception as e:
+            print("[-] Error: Ending Reverse Shell Listener...")
+            # handle errors from run module and end socket connection if needed
+            time.sleep(1)
+            exit(0)
+        # REVERSE SHELL SERVER OPTIONS
+        main_options()
+    elif user_option == 1:
+        # LAN FILE SHARING SERVER
+        ban('File Sharing Server')
+        time.sleep(1)
+        folder_server = dir_serve3
+        try:
+            # run serpent module
+            # dir_port = int(input("Please enter a port number to serve folder on\n>"))
+            user_option = input('Press enter to begin serving contents of /home\n>')
+            # print("[+] Starting Python Folder Server on port %s..." % dir_port)
+            folder_server.run()
+        except Exception as e:
+            print("[-] Error: Ending Folder Server...")
+            # handle errors from run module and end socket connection if needed
+            time.sleep(1)
+            main_options()
+        # LAN FILE SHARING SERVER
+        main_options()
+    else:
+        # unknown input; call func again 
+        server_options()
 #################################################################################
 
 
