@@ -4,8 +4,6 @@ SerPeNT: Simple Python Network Toolkit
 
 usage: python serpent.py
 
-notes: TODO: refactor fs/ validate inputs, cross platform errors handled
-
 """
 
 

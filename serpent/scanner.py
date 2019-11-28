@@ -234,7 +234,6 @@ def connScan(tgtHost, tgtPort, isConnectScan):
     except:
         # print failure results
         print("[-] tcp port {} closed".format(str(tgtPort)), end="\r", flush=True)
-        # print("", end="\r", flush=True)
         pass
     finally:
         # close the socket object
