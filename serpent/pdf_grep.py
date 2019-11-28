@@ -81,7 +81,7 @@ def pdf_search_loop(dir_path):
     # end of files in path_dir loop, return the populated results array
 
     #######
-    #TODO: return disabled during DEBUG process
+    # TODO: return disabled during DEBUG process
     # return results
     #######
     print("\n\n    END OF PROGRAM: RESULTS ARE\n")
