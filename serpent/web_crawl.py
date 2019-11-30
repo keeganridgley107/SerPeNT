@@ -17,9 +17,11 @@ def get_site():
 
     # quick check format
     good_url = input(
-        "[?] Is {} the correct target address? y/n\n".format(website))
+        "[?] Is {} the correct target address? (Yes, No or Quit) \ny/n/q\n>".format(website))
     if good_url == "y":
         return website
+    elif good_url == "q":
+        exit()
     else:
         get_site()  # like magic baby
 
