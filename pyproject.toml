@@ -1,0 +1,10 @@
+[tool]
+[tool.poetry]
+authors = ["keeg <keeganwridgley@gmail.com>"]
+name = "serpent"
+version = "0.1.0"
+[tool.poetry.dependencies]
+beautifulsoup4 = "==4.8.1"
+pypdf2 = "==1.26.0"
+python = "^3.7"
+soupsieve = "==1.9.5"
