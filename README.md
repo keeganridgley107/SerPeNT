@@ -7,7 +7,7 @@
 
 Serpent is a simple cross platform :snake: based interactive network toolkit.
 
-its essentially a few smaller tools wrapped up in a interactive cli that uses argparse to deal with params
+its essentially a few small (ctf related) tools wrapped up in a interactive cli that uses argparse to deal with params
 
 #### Features Include:
 
